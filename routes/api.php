@@ -27,18 +27,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
-    Route::post('user/store1', 'UserController@store');
     Route::get('profile', 'ProfileController@profile');
     Route::put('profile', 'ProfileController@updateProfile');
     Route::post('change-password', 'ProfileController@changePassword');
     Route::get('tag/list', 'TagController@list');
     Route::get('category/list', 'CategoryController@list');
     Route::post('product/upload', 'ProductController@upload');
-    Route::get('draft', 'TimesheetController@getDaft');
 
     Route::apiResources([
         'user' => 'UserController',
+        'permission' => 'PermissionController',
         'service' => 'ServiceController',
+        'booking' => 'BookingController',
     ]);
-
 });

@@ -32,10 +32,9 @@ class UserController extends BaseController
         }
         // $this->authorize('isAdmin');
 
-        $permissions = Permission::select('id','name')->get();
         $users = User::latest()->paginate(10);
 
-        return $this->sendResponse($users, 'Users list');
+        return $this->sendResponse($users, 'User Created Successfully');
     }
 
     /**
@@ -50,12 +49,19 @@ class UserController extends BaseController
      */
     public function store(UserRequest $request)
     {
+        // dd($request->all());
+
         $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
+            'type' => $request['type'],
             'password' => Hash::make($request['password']),
-            'type' => 'admin',
         ]);
+
+        if ($request->has('permission')) {
+            $permissions = Permission::whereIn('id', $request->permission)->get();
+            $user->permissions()->attach($permissions);
+        }
 
         return $this->sendResponse($user, 'User Created Successfully');
     }

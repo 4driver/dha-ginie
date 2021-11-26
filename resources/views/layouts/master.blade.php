@@ -8,7 +8,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>DHA GINIE - DASHBOARD</title>
+    <title>DHA Ginie - Admin Dashboard</title>
 
 
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
@@ -79,7 +79,7 @@
             <router-link to="/dashboard" class="brand-link">
                 {{-- <img src="{{ asset('/images/logo2.png') }}" alt="The Logo"
                     class="brand-image img-circle elevation-3" style="opacity: .8"> --}}
-                <span class="brand-text font-weight-light">{{ 'DHA Ginie - Admin' }}</span>
+                <span class="brand-text font-weight-light pl-2">DHA Ginie - Dashboard</span>
             </router-link>
 
             <!-- Sidebar -->
@@ -145,8 +145,7 @@
                 <b>Version</b> 3.0.0
             </div>
             {{-- Default to the left --}}
-            <strong>Copyright &copy; 2014-2022 <a href="https://tms.skynetsolutionz.com">TMS</a>.</strong> All rights
-            reserved.
+            <strong>Copyright &copy; 2014-2022 <a href="#">DHA Ginie</a>.</strong> All rights reserved.
         </footer>
     </div>
     {{-- ./wrapper --}}

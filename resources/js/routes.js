@@ -1,18 +1,8 @@
 export default [
-    {
-        path: "/dashboard",
-        component: require("./components/Dashboard.vue").default
-    },
-    {
-        path: "/adminusers/index",
-        component: require("./components/adminusers/Index.vue").default
-    },
-    {
-        path: "/adminusers/create",
-        component: require("./components/adminusers/Create.vue").default
-    },
 
+    { path: "/dashboard", component: require("./components/Dashboard.vue").default },
     { path: "/services", component: require("./components/Services.vue").default },
+    { path: "/bookings", component: require("./components/Bookings.vue").default },
 
 
     // OLD

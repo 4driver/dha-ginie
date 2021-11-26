@@ -5,7 +5,7 @@
         <div class="col-12">
           <div class="card" v-if="$gate.isAdmin()">
             <div class="card-header">
-              <h3 class="card-title">User List</h3>
+              <h3 class="card-title">Bookings List</h3>
 
               <div class="card-tools">
                 <button
@@ -24,27 +24,21 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Type</th>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Created</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="user in users.data" :key="user.id">
-                    <td>{{ user.id }}</td>
-                    <td class="text-capitalize">{{ user.type }}</td>
-                    <td class="text-capitalize">{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.created_at }}</td>
+                  <tr v-for="booking in bookings.data" :key="booking.id">
+                    <td>{{ booking.id }}</td>
+                    <td class="text-capitalize">{{ booking.name }}</td>
 
                     <td>
-                      <a href="#" @click="editModal(user)">
+                      <a href="#" @click="editModal(booking)">
                         <i class="fa fa-edit blue"></i>
                       </a>
                       /
-                      <a href="#" @click="deleteUser(user.id)">
+                      <a href="#" @click="deleteUser(booking.id)">
                         <i class="fa fa-trash red"></i>
                       </a>
                     </td>
@@ -55,7 +49,7 @@
             <!-- /.card-body -->
             <div class="card-footer">
               <pagination
-                :data="users"
+                :data="bookings"
                 @pagination-change-page="getResults"
               ></pagination>
             </div>
@@ -92,8 +86,6 @@
               </button>
             </div>
 
-            <!-- <form @submit.prevent="createUser"> -->
-
             <form @submit.prevent="editmode ? updateUser() : createUser()">
               <div class="modal-body">
                 <div class="form-group">
@@ -106,62 +98,6 @@
                     :class="{ 'is-invalid': form.errors.has('name') }"
                   />
                   <has-error :form="form" field="name"></has-error>
-                </div>
-                <div class="form-group">
-                  <label>Email</label>
-                  <input
-                    v-model="form.email"
-                    type="text"
-                    name="email"
-                    class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('email') }"
-                  />
-                  <has-error :form="form" field="email"></has-error>
-                </div>
-
-                <div class="form-group">
-                  <label>Password</label>
-                  <input
-                    v-model="form.password"
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('password') }"
-                    autocomplete="false"
-                  />
-                  <has-error :form="form" field="password"></has-error>
-                </div>
-
-                <div class="form-group">
-                  <label>User Role</label>
-                  <select
-                    name="type"
-                    v-model="form.type"
-                    id="type"
-                    class="form-control custom-select"
-                    :class="{ 'is-invalid': form.errors.has('type') }"
-                  >
-                    <option value="">Select User Role</option>
-                    <option value="admin">Admin</option>
-                    <option value="user">Standard User</option>
-                    <option value="vendor">Vendor</option>
-                  </select>
-                  <has-error :form="form" field="type"></has-error>
-                </div>
-                <div class="form-group">
-                  <label>Permission</label>
-                  <select
-                    name="permission[]"
-                    v-model="form.permission"
-                    id="permission"
-                    class="form-control custom-select"
-                    :class="{ 'is-invalid': form.errors.has('permission') }"
-                    multiple="multiple"
-                  >
-                    <option value="">Select Permission</option>
-                    <option v-for="permission in permissions" :key="permission.id" :value="permission.id">{{permission.name}}</option>
-                  </select>
-                  <has-error :form="form" field="type"></has-error>
                 </div>
               </div>
               <div class="modal-footer">
@@ -196,44 +132,35 @@ export default {
   data() {
     return {
       editmode: false,
-      users: {},
-      permissions: {},
+      bookings: {},
       form: new Form({
         id: "",
-        type: "",
-        permission: "",
         name: "",
-        email: "",
-        password: "",
-        email_verified_at: "",
       }),
     };
   },
+
   methods: {
     getResults(page = 1) {
       this.$Progress.start();
 
       axios
-        .get("api/user?page=" + page)
-        .then(({ data }) => (this.users = data.data));
+        .get("api/booking?page=" + page)
+        .then(({ data }) => (this.bookings = data.data));
 
       this.$Progress.finish();
     },
     updateUser() {
       this.$Progress.start();
-      // console.log('Editing data');
       this.form
-        .put("api/user/" + this.form.id)
+        .put("api/booking/" + this.form.id)
         .then((response) => {
-          // success
           $("#addNew").modal("hide");
           Toast.fire({
             icon: "success",
             title: response.data.message,
           });
           this.$Progress.finish();
-          //  Fire.$emit('AfterCreate');
-
           this.loadUsers();
         })
         .catch(() => {
@@ -260,13 +187,11 @@ export default {
         cancelButtonColor: "#3085d6",
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
-        // Send request to the server
         if (result.value) {
           this.form
-            .delete("api/user/" + id)
+            .delete("api/booking/" + id)
             .then(() => {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              // Fire.$emit('AfterCreate');
               this.loadUsers();
             })
             .catch((data) => {
@@ -277,34 +202,20 @@ export default {
     },
     loadUsers() {
       this.$Progress.start();
-
       if (this.$gate.isAdmin()) {
-        axios.get("api/user").then(({ data }) => (this.users = data.data));
+        axios.get("api/booking").then(({ data }) => (this.bookings = data.data));
       }
-
       this.$Progress.finish();
     },
-        loadPermissions() {
-      this.$Progress.start();
-
-      if (this.$gate.isAdmin()) {
-        axios.get("api/permission").then(({ data }) => (this.permissions = data.data));
-      }
-
-      this.$Progress.finish();
-    },
-
     createUser() {
       this.form
-        .post("api/user")
+        .post("api/booking")
         .then((response) => {
           $("#addNew").modal("hide");
-
           Toast.fire({
             icon: "success",
             title: response.data.message,
           });
-
           this.$Progress.finish();
           this.loadUsers();
         })
@@ -316,13 +227,14 @@ export default {
         });
     },
   },
+
   mounted() {
-    console.log("User Component mounted.");
+    console.log("Success");
   },
+
   created() {
     this.$Progress.start();
     this.loadUsers();
-    this.loadPermissions();
     this.$Progress.finish();
   },
 };
