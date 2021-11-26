@@ -3,6 +3,7 @@ export default [
     { path: "/dashboard", component: require("./components/Dashboard.vue").default },
     { path: "/services", component: require("./components/Services.vue").default },
     { path: "/bookings", component: require("./components/Bookings.vue").default },
+    { path: "/tasks", component: require("./components/Tasks.vue").default },
 
 
     // OLD

@@ -4,9 +4,23 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\TaskRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Task;
 
-class TaskController extends Controller
+class TaskController extends BaseController
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +28,13 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        if (!Gate::allows('isAdmin')) {
+            return $this->unauthorizedResponse();
+        }
+
+        $tasks = Task::latest()->paginate(10);
+
+        return $this->sendResponse($tasks, 'Success');
     }
 
     /**
@@ -33,9 +53,10 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        //
+        $task = Task::create($request->validated());
+        return $this->sendResponse($task, 'Record added successfully.');
     }
 
     /**
@@ -67,9 +88,12 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, $id)
     {
-        //
+        $task = Task::findOrFail($id);
+        $task->update($request->validated());
+
+        return $this->sendResponse($task, 'Record updated successfully.');
     }
 
     /**
@@ -80,6 +104,9 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('isAdmin');
+        $task = Task::findOrFail($id);
+        $task->delete();
+        return $this->sendResponse([$task], 'Record has been deleted');
     }
 }

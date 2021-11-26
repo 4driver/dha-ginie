@@ -39,5 +39,6 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'permission' => 'PermissionController',
         'service' => 'ServiceController',
         'booking' => 'BookingController',
+        'task' => 'TaskController',
     ]);
 });
