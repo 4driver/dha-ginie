@@ -39,7 +39,7 @@ class GalleryRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
+            'image' => 'required',
         ];
     }
 
@@ -52,7 +52,7 @@ class GalleryRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'image' => 'required|string|max:255',
+            'image' => 'required',
         ];
     }
 }

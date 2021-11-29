@@ -32,7 +32,7 @@
                   <tr v-for="gallery in galleries.data" :key="gallery.id">
                     <td>{{ gallery.id }}</td>
                     <td class="text-capitalize">{{ gallery.title }}</td>
-                    <td>{{ gallery.image }}</td>
+                    <td><img :src="getImageUrl(gallery.image)"></td>
                     <td>
                       <a href="#" @click="editModal(gallery)">
                         <i class="fa fa-edit blue"></i>
@@ -94,9 +94,11 @@
                   <has-error :form="form" field="title"></has-error>
                 </div>
                 <div class="form-group">
-                  <label>Image</label>
-                  <input v-model="form.image" type="text" name="image" class="form-control" :class="{ 'is-invalid': form.errors.has('image') }"/>
-                  <has-error :form="form" field="image"></has-error>
+                    <input type="file" @change='upload_image' :class="{ 'is-invalid': form.errors.has('image') }" name="image">
+                    <has-error :form="form" field="image"></has-error>
+                    <div class="image img-fluid img-circle" style="margin-top:10px">
+                        <img :src="get_image()" v-bind:style="form.styleObject"/>
+                    </div>
                 </div>
               </div>
               <div class="modal-footer">
@@ -212,6 +214,31 @@ export default {
           });
         });
     },
+
+    upload_image(e){
+        let file = e.target.files[0];
+        let reader = new FileReader();
+
+        if(file['size'] < 2111775)
+        {
+            reader.onloadend = (file) => {
+                this.form.image = reader.result;
+            }
+                reader.readAsDataURL(file);
+        }else{
+            alert('File size can not be bigger than 2 MB')
+        }
+    },
+
+    get_image(){
+        let photo = (this.form.image.length > 100) ? this.form.image : "uploads/"+ this.form.image;
+        return photo;
+    },
+
+    getImageUrl(url) {
+      return "/uploads/" + url;
+    },
+
   },
 
   mounted() {

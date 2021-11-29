@@ -53,9 +53,24 @@ class GalleryController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(GalleryRequest $request)
+    public function store(Request $request)
     {
-        $gallery = Gallery::create($request->validated());
+        $this->validate($request, [
+            'title' => 'required',
+            'image' => 'required'
+        ]);
+
+        if($request->image){
+            $name = time().'.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+            \Image::make($request->image)->save(public_path('uploads/').$name);
+            $request->merge(['image' => $name]);
+        }
+
+        $gallery = new Gallery;
+        $gallery->title = $request->title;
+        $gallery->image = $name;
+        $gallery->save();
+
         return $this->sendResponse($gallery, 'Record added successfully.');
     }
 
@@ -88,10 +103,23 @@ class GalleryController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(GalleryRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $gallery = Gallery::findOrFail($id);
-        $gallery->update($request->validated());
+        $this->validate($request, [
+            'title' => 'required',
+            'image' => 'nullable'
+        ]);
+
+        if($request->image){
+            $name = time().'.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+            \Image::make($request->image)->save(public_path('uploads/').$name);
+            $request->merge(['image' => $name]);
+        }
+
+        $gallery = Gallery::find($id);
+        $gallery->title = $request->title;
+        $gallery->image = $name;
+        $gallery->save();
 
         return $this->sendResponse($gallery, 'Record updated successfully.');
     }
