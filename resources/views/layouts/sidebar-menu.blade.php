@@ -77,7 +77,7 @@
         </li>
 
         <li class="nav-item">
-            <router-link to="#" class="nav-link">
+            <router-link to="/complaints" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
                 <p>Manage Complaints</p>
             </router-link>

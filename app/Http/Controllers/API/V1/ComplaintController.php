@@ -4,9 +4,23 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\ComplaintRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Complaint;
 
-class ComplaintController extends Controller
+class ComplaintController extends BaseController
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +28,13 @@ class ComplaintController extends Controller
      */
     public function index()
     {
-        //
+        if (!Gate::allows('isAdmin')) {
+            return $this->unauthorizedResponse();
+        }
+
+        $complaints = Complaint::latest()->paginate(10);
+
+        return $this->sendResponse($complaints, 'Success');
     }
 
     /**
@@ -33,9 +53,10 @@ class ComplaintController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        //
+        $complaint = Complaint::create($request->validated());
+        return $this->sendResponse($complaint, 'Record added successfully.');
     }
 
     /**
@@ -67,9 +88,12 @@ class ComplaintController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, $id)
     {
-        //
+        $complaint = Complaint::findOrFail($id);
+        $complaint->update($request->validated());
+
+        return $this->sendResponse($complaint, 'Record updated successfully.');
     }
 
     /**
@@ -80,6 +104,9 @@ class ComplaintController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('isAdmin');
+        $complaint = Complaint::findOrFail($id);
+        $complaint->delete();
+        return $this->sendResponse([$complaint], 'Record has been deleted');
     }
 }
