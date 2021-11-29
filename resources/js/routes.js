@@ -7,6 +7,7 @@ export default [
     { path: "/pages", component: require("./components/Pages.vue").default },
     { path: "/complaints", component: require("./components/Complaints.vue").default },
     { path: "/faqs", component: require("./components/Faqs.vue").default },
+    { path: "/galleries", component: require("./components/Galleries.vue").default },
 
     // OLD
     {

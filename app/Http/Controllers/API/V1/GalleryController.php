@@ -4,9 +4,23 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\GalleryRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Gallery;
 
-class GalleryController extends Controller
+class GalleryController extends BaseController
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +28,13 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        //
+        if (!Gate::allows('isAdmin')) {
+            return $this->unauthorizedResponse();
+        }
+
+        $galleries = Gallery::latest()->paginate(10);
+
+        return $this->sendResponse($galleries, 'Success');
     }
 
     /**
@@ -33,9 +53,10 @@ class GalleryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(GalleryRequest $request)
     {
-        //
+        $gallery = Gallery::create($request->validated());
+        return $this->sendResponse($gallery, 'Record added successfully.');
     }
 
     /**
@@ -67,9 +88,12 @@ class GalleryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(GalleryRequest $request, $id)
     {
-        //
+        $gallery = Gallery::findOrFail($id);
+        $gallery->update($request->validated());
+
+        return $this->sendResponse($gallery, 'Record updated successfully.');
     }
 
     /**
@@ -80,6 +104,9 @@ class GalleryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('isAdmin');
+        $gallery = Gallery::findOrFail($id);
+        $gallery->delete();
+        return $this->sendResponse([$gallery], 'Record has been deleted');
     }
 }
