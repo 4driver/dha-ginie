@@ -86,7 +86,7 @@
               </button>
             </div>
 
-            <form @submit.prevent="editmode ? updateFaq() : createFaq()">
+            <form @submit.prevent="editmode ? updateGallery() : createGallery()">
               <div class="modal-body">
                 <div class="form-group">
                   <label>Title</label>
@@ -136,7 +136,7 @@ export default {
 
       this.$Progress.finish();
     },
-    updateFaq() {
+    updateGallery() {
       this.$Progress.start();
       this.form
         .put("api/gallery/" + this.form.id)
@@ -193,7 +193,7 @@ export default {
       }
       this.$Progress.finish();
     },
-    createFaq() {
+    createGallery() {
       this.form
         .post("api/gallery")
         .then((response) => {
@@ -215,7 +215,7 @@ export default {
   },
 
   mounted() {
-    console.log("Success");
+    console.log("GALLERIES COMPONENT - SUCCESS");
   },
 
   created() {

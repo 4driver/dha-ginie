@@ -225,7 +225,7 @@ export default {
   },
 
   mounted() {
-    console.log("Success");
+    console.log("FAQ COMPONENT - SUCCESS");
   },
 
   created() {

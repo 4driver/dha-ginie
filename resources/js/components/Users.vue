@@ -201,15 +201,16 @@ export default {
       form: new Form({
         id: "",
         type: "",
-        permission: "",
+        permission: [],
         name: "",
         email: "",
         password: "",
-        email_verified_at: "",
       }),
     };
   },
+
   methods: {
+
     getResults(page = 1) {
       this.$Progress.start();
 
@@ -219,38 +220,38 @@ export default {
 
       this.$Progress.finish();
     },
+
     updateUser() {
       this.$Progress.start();
-      // console.log('Editing data');
       this.form
         .put("api/user/" + this.form.id)
         .then((response) => {
-          // success
           $("#addNew").modal("hide");
           Toast.fire({
             icon: "success",
             title: response.data.message,
           });
           this.$Progress.finish();
-          //  Fire.$emit('AfterCreate');
-
           this.loadUsers();
         })
         .catch(() => {
           this.$Progress.fail();
         });
     },
+
     editModal(user) {
       this.editmode = true;
       this.form.reset();
       $("#addNew").modal("show");
       this.form.fill(user);
     },
+
     newModal() {
       this.editmode = false;
       this.form.reset();
       $("#addNew").modal("show");
     },
+
     deleteUser(id) {
       Swal.fire({
         title: "Are you sure?",
@@ -260,13 +261,11 @@ export default {
         cancelButtonColor: "#3085d6",
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
-        // Send request to the server
         if (result.value) {
           this.form
             .delete("api/user/" + id)
             .then(() => {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              // Fire.$emit('AfterCreate');
               this.loadUsers();
             })
             .catch((data) => {
@@ -275,18 +274,17 @@ export default {
         }
       });
     },
+
     loadUsers() {
       this.$Progress.start();
-
       if (this.$gate.isAdmin()) {
         axios.get("api/user").then(({ data }) => (this.users = data.data));
       }
-
       this.$Progress.finish();
     },
-        loadPermissions() {
-      this.$Progress.start();
 
+    loadPermissions() {
+      this.$Progress.start();
       if (this.$gate.isAdmin()) {
         axios.get("api/permission").then(({ data }) => (this.permissions = data.data));
       }
@@ -316,9 +314,11 @@ export default {
         });
     },
   },
+
   mounted() {
-    console.log("User Component mounted.");
+    console.log("USER COMPONENT - SUCCESS");
   },
+
   created() {
     this.$Progress.start();
     this.loadUsers();

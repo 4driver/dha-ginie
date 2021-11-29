@@ -40,7 +40,7 @@
                         <i class="fa fa-edit blue"></i>
                       </a>
                       /
-                      <a href="#" @click="deleteUser(task.id)">
+                      <a href="#" @click="deleteTask(task.id)">
                         <i class="fa fa-trash red"></i>
                       </a>
                     </td>
@@ -88,7 +88,7 @@
               </button>
             </div>
 
-            <form @submit.prevent="editmode ? updateUser() : createUser()">
+            <form @submit.prevent="editmode ? updateTask() : createTask()">
               <div class="modal-body">
                 <div class="form-group">
                   <label>Name</label>
@@ -138,7 +138,7 @@ export default {
 
       this.$Progress.finish();
     },
-    updateUser() {
+    updateTask() {
       this.$Progress.start();
       this.form
         .put("api/task/" + this.form.id)
@@ -149,7 +149,7 @@ export default {
             title: response.data.message,
           });
           this.$Progress.finish();
-          this.loadUsers();
+          this.loadTasks();
         })
         .catch(() => {
           this.$Progress.fail();
@@ -166,7 +166,7 @@ export default {
       this.form.reset();
       $("#addNew").modal("show");
     },
-    deleteUser(id) {
+    deleteTask(id) {
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -180,7 +180,7 @@ export default {
             .delete("api/task/" + id)
             .then(() => {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              this.loadUsers();
+              this.loadTasks();
             })
             .catch((data) => {
               Swal.fire("Failed!", data.message, "warning");
@@ -188,14 +188,14 @@ export default {
         }
       });
     },
-    loadUsers() {
+    loadTasks() {
       this.$Progress.start();
       if (this.$gate.isAdmin()) {
         axios.get("api/task").then(({ data }) => (this.tasks = data.data));
       }
       this.$Progress.finish();
     },
-    createUser() {
+    createTask() {
       this.form
         .post("api/task")
         .then((response) => {
@@ -205,7 +205,7 @@ export default {
             title: response.data.message,
           });
           this.$Progress.finish();
-          this.loadUsers();
+          this.loadTasks();
         })
         .catch(() => {
           Toast.fire({
@@ -217,12 +217,12 @@ export default {
   },
 
   mounted() {
-    console.log("Success");
+    console.log("TASK COMPONENT - SUCCESS");
   },
 
   created() {
     this.$Progress.start();
-    this.loadUsers();
+    this.loadTasks();
     this.$Progress.finish();
   },
 };

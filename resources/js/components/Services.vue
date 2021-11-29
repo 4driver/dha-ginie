@@ -51,7 +51,7 @@
             <!-- /.card-body -->
             <div class="card-footer">
               <pagination
-                :data="users"
+                :data="services"
                 @pagination-change-page="getResults"
               ></pagination>
             </div>
@@ -185,19 +185,15 @@ export default {
     },
     updateService() {
       this.$Progress.start();
-      // console.log('Editing data');
       this.form
         .put("api/service/" + this.form.id)
         .then((response) => {
-          // success
           $("#addNew").modal("hide");
           Toast.fire({
             icon: "success",
             title: response.data.message,
           });
           this.$Progress.finish();
-          //  Fire.$emit('AfterCreate');
-
           this.loadServices();
         })
         .catch(() => {
@@ -224,13 +220,11 @@ export default {
         cancelButtonColor: "#3085d6",
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
-        // Send request to the server
         if (result.value) {
           this.form
             .delete("api/service/" + id)
             .then(() => {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              // Fire.$emit('AfterCreate');
               this.loadServices();
             })
             .catch((data) => {
@@ -272,7 +266,7 @@ export default {
   },
 
   mounted() {
-    console.log("Service Component mounted.");
+    console.log("SERVICE COMPONET - SUCCESS");
   },
 
   created() {

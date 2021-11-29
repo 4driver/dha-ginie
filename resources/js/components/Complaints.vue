@@ -60,6 +60,9 @@ export default {
     return {
       editmode: false,
       complaints: {},
+      form: new Form({
+        id: "",
+      }),
     };
   },
 
@@ -124,7 +127,7 @@ export default {
   },
 
   mounted() {
-    console.log("Success");
+    console.log("COMPLAINTS COMPONENT - SUCCESS");
   },
 
   created() {

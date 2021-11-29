@@ -60,8 +60,8 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" v-show="!editmode">Create New User</h5>
-              <h5 class="modal-title" v-show="editmode">Update User's Info</h5>
+              <h5 class="modal-title" v-show="!editmode">-</h5>
+              <h5 class="modal-title" v-show="editmode">Update CMS Page</h5>
               <button
                 type="button"
                 class="close"
@@ -231,7 +231,7 @@ export default {
     },
   },
   mounted() {
-    console.log("Success");
+    console.log("PAGE COMPONENT - SUCCESS");
   },
   created() {
     this.$Progress.start();
