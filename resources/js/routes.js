@@ -4,6 +4,7 @@ export default [
     { path: "/services", component: require("./components/Services.vue").default },
     { path: "/bookings", component: require("./components/Bookings.vue").default },
     { path: "/tasks", component: require("./components/Tasks.vue").default },
+    { path: "/pages", component: require("./components/Pages.vue").default },
 
 
     // OLD

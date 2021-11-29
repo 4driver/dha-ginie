@@ -40,5 +40,6 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'service' => 'ServiceController',
         'booking' => 'BookingController',
         'task' => 'TaskController',
+        'page' => 'PageController',
     ]);
 });
