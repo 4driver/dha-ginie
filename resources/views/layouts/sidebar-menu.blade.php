@@ -41,13 +41,13 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <router-link to="/bookings" class="nav-link ">
+                    <router-link to="/bookings/authorization" class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Booking Authorization </p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/bookings" class="nav-link ">
+                    <router-link to="/bookings/task-assignments" class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Task Assignment</p>
                     </router-link>
@@ -93,13 +93,13 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <router-link to="#" class="nav-link ">
+                    <router-link to="/reports/bookings" class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Bookings </p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to="#" class="nav-link ">
+                    <router-link to="/reports/payments" class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Payments</p>
                     </router-link>

@@ -11,5 +11,10 @@ export default [
     { path: "/users", component: require("./components/Users.vue").default },
     { path: "/profile", component: require("./components/Profile.vue").default },
     { path: "/forms/validation", component: require("./components/Profile.vue").default },
+    { path: "/bookings/authorization", component: require("./components/bookings/BookingAuthorization.vue").default },
+    { path: "/bookings/task-assignments", component: require("./components/bookings/TaskAssignment.vue").default },
+    { path: "/reports/bookings", component: require("./components/reports/BookingsReport.vue").default },
+    { path: "/reports/payments", component: require("./components/reports/PaymentsReport.vue").default },
+
     { path: "*", component: require("./components/NotFound.vue").default }
 ];
