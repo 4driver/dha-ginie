@@ -44,5 +44,6 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'complaint' => 'ComplaintController',
         'faq' => 'FaqController',
         'gallery' => 'GalleryController',
+        'payment' => 'PaymentController',
     ]);
 });
