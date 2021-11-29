@@ -13,7 +13,7 @@
                                     <div class="small-box bg-primary">
                                         <div class="inner">
                                             <h3>
-                                                0
+                                                65
                                             </h3>
                                             <p>Total Tasks</p>
                                         </div>
@@ -26,7 +26,7 @@
                                     <div class="small-box bg-warning">
                                         <div class="inner">
                                             <h3>
-                                                0
+                                            30
                                             </h3>
                                             <p>Opened Tasks</p>
                                         </div>
@@ -39,7 +39,7 @@
                                     <div class="small-box bg-danger">
                                         <div class="inner">
                                             <h3>
-                                                0
+                                                25
                                             </h3>
                                             <p>Closed Tasks</p>
                                         </div>
@@ -52,7 +52,7 @@
                                     <div class="small-box bg-success">
                                         <div class="inner">
                                             <h3>
-                                                0
+                                                15
                                             </h3>
                                             <p>Pending Tasks</p>
                                         </div>
@@ -65,7 +65,7 @@
                                     <div class="small-box bg-danger">
                                         <div class="inner">
                                             <h3>
-                                                0
+                                                10
                                             </h3>
                                             <p>Cancelled Tasks</p>
                                         </div>
@@ -78,7 +78,7 @@
                                     <div class="small-box bg-success">
                                         <div class="inner">
                                             <h3>
-                                                0
+                                                21
                                             </h3>
                                             <p>Top Vendors</p>
                                         </div>
@@ -91,7 +91,7 @@
                                     <div class="small-box bg-primary">
                                         <div class="inner">
                                             <h3>
-                                                0
+                                                89
                                             </h3>
                                             <p>Booked Services</p>
                                         </div>
@@ -104,7 +104,7 @@
                                     <div class="small-box bg-warning">
                                         <div class="inner">
                                             <h3>
-                                                0
+                                                78
                                             </h3>
                                             <p>Free Services</p>
                                         </div>
