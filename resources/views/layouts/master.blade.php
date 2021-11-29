@@ -142,10 +142,10 @@
         <footer class="main-footer">
             {{-- To the right --}}
             <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.0.0
+                <b>Version</b> 1.0.0
             </div>
             {{-- Default to the left --}}
-            <strong>Copyright &copy; 2014-2022 <a href="#">DHA Ginie</a>.</strong> All rights reserved.
+            <strong>Copyright &copy; 2021-2022 <a href="#">DHA Ginie</a>.</strong> All rights reserved.
         </footer>
     </div>
     {{-- ./wrapper --}}

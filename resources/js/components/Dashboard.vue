@@ -8,9 +8,112 @@
                             <h3 class="card-title">Dashboard</h3>
                         </div>
                         <div class="card-body">
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus reiciendis totam labore corrupti facere numquam deserunt unde voluptas at a veritatis quis natus nihil optio, omnis minima eos sequi illum?
-                            </p>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="small-box bg-primary">
+                                        <div class="inner">
+                                            <h3>
+                                                0
+                                            </h3>
+                                            <p>Total Tasks</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-bag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="small-box bg-warning">
+                                        <div class="inner">
+                                            <h3>
+                                                0
+                                            </h3>
+                                            <p>Opened Tasks</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-bag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="small-box bg-danger">
+                                        <div class="inner">
+                                            <h3>
+                                                0
+                                            </h3>
+                                            <p>Closed Tasks</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-bag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="small-box bg-success">
+                                        <div class="inner">
+                                            <h3>
+                                                0
+                                            </h3>
+                                            <p>Pending Tasks</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-bag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="small-box bg-danger">
+                                        <div class="inner">
+                                            <h3>
+                                                0
+                                            </h3>
+                                            <p>Cancelled Tasks</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-bag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="small-box bg-success">
+                                        <div class="inner">
+                                            <h3>
+                                                0
+                                            </h3>
+                                            <p>Top Vendors</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-bag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="small-box bg-primary">
+                                        <div class="inner">
+                                            <h3>
+                                                0
+                                            </h3>
+                                            <p>Booked Services</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-bag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="small-box bg-warning">
+                                        <div class="inner">
+                                            <h3>
+                                                0
+                                            </h3>
+                                            <p>Free Services</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-bag"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

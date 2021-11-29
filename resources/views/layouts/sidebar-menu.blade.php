@@ -12,7 +12,7 @@
         @can('isAdmin')
         <li class="nav-item">
             <router-link to="/users" class="nav-link">
-                <i class="fa fa-users nav-icon"></i>
+                <i class="fa fa-list nav-icon"></i>
                 <p>Manage Users</p>
             </router-link>
         </li>
@@ -120,31 +120,15 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <router-link to="/myaccount/personaldetails" class="nav-link ">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Personal Details</p>
-                    </router-link>
-                </li>
-            </ul>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
                     <router-link to="/profile" class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Profile</p>
                     </router-link>
                 </li>
             </ul>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <router-link to="/myaccount/notification" class="nav-link ">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>My Notification Settings</p>
-                    </router-link>
-                </li>
-            </ul>
         </li>
 
-        @can('isAdmin')
+        {{-- @can('isAdmin')
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-cog green"></i>
@@ -155,15 +139,14 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <router-link to="/setting/configuration" class="nav-link">
+                    <router-link to="#" class="nav-link">
                         <i class="nav-icon fas fa-cash-register green"></i>
                         <p>Configrations</p>
                     </router-link>
                 </li>
             </ul>
         </li>
-
-        @endcan
+        @endcan --}}
 
 
         <li class="nav-item">
