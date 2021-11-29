@@ -31,7 +31,6 @@ class BookingController extends BaseController
         if (!Gate::allows('isAdmin')) {
             return $this->unauthorizedResponse();
         }
-
         $bookings = Booking::latest()->paginate(10);
         return $this->sendResponse($bookings, 'success');
     }

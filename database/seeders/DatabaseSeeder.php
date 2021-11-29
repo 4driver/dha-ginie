@@ -19,7 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductsTableSeeder::class);
         $this->call(PermissionSeeder::class);
         $this->call(PageSeeder::class);
-        \App\Models\Complaint::factory(50)->create();
-        \App\Models\Faq::factory(50)->create();
+        \App\Models\Complaint::factory(25)->create();
+        \App\Models\Faq::factory(25)->create();
+        \App\Models\Booking::factory(25)->create();
+        \App\Models\Task::factory(25)->create();
+        \App\Models\Service::factory(25)->create();
     }
 }

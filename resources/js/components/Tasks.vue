@@ -97,7 +97,7 @@
                 </div>
                 <div class="form-group">
                   <label>Description</label>
-                  <input v-model="form.description" type="text" name="description" class="form-control" :class="{ 'is-invalid': form.errors.has('description') }"/>
+                  <textarea v-model="form.description" rows="5" type="text" name="description" class="form-control" :class="{ 'is-invalid': form.errors.has('description') }"/>
                   <has-error :form="form" field="description"></has-error>
                 </div>
               </div>
