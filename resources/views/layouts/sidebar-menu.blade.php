@@ -63,7 +63,7 @@
         </li>
 
         <li class="nav-item">
-            <router-link to="#" class="nav-link">
+            <router-link to="faqs" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
                 <p>Manage FAQs</p>
             </router-link>

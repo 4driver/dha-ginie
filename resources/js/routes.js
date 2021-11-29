@@ -6,7 +6,7 @@ export default [
     { path: "/tasks", component: require("./components/Tasks.vue").default },
     { path: "/pages", component: require("./components/Pages.vue").default },
     { path: "/complaints", component: require("./components/Complaints.vue").default },
-
+    { path: "/faqs", component: require("./components/Faqs.vue").default },
 
     // OLD
     {
@@ -260,10 +260,6 @@ export default [
     {
         path: "/supportDesk",
         component: require("./components/SupportDesk.vue").default
-    },
-    {
-        path: "/faq",
-        component: require("./components/Faq.vue").default
     }, {
         path: "/ticket",
         component: require("./components/Ticket.vue").default
