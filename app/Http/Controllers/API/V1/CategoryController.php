@@ -32,7 +32,7 @@ class CategoryController extends BaseController
             return $this->unauthorizedResponse();
         }
 
-        $categorys = Category::latest()->paginate(10);
+        $categorys = Category::orderBy('id','desc')->paginate(10);
 
         return $this->sendResponse($categorys, 'Success');
     }
@@ -108,5 +108,11 @@ class CategoryController extends BaseController
         $category = Category::findOrFail($id);
         $category->delete();
         return $this->sendResponse([$category], 'Record has been deleted');
+    }
+
+    public function getCategories()
+    {
+        $categories = Category::orderBy('name','asc')->get();
+        return $this->sendResponse($categories, 'Success');
     }
 }

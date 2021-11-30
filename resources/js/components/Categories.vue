@@ -25,7 +25,7 @@
                   <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Description</th>
+                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -33,14 +33,17 @@
                   <tr v-for="task in tasks.data" :key="task.id">
                     <td>{{ task.id }}</td>
                     <td class="text-capitalize">{{ task.name }}</td>
-                    <td class="text-capitalize">{{ task.description }}</td>
+                    <td class="text-capitalize">
+                        <span v-if="task.status == 1" class="badge badge-success">Active</span>
+                        <span v-else class="badge badge-danger">Inactive</span>
+                    </td>
 
                     <td>
                       <a href="#" @click="editModal(task)">
                         <i class="fa fa-edit blue"></i>
                       </a>
                       /
-                      <a href="#" @click="deleteTask(task.id)">
+                      <a href="#" @click="deleteCategory(task.id)">
                         <i class="fa fa-trash red"></i>
                       </a>
                     </td>
@@ -96,9 +99,14 @@
                   <has-error :form="form" field="name"></has-error>
                 </div>
                 <div class="form-group">
-                  <label>Description</label>
-                  <textarea v-model="form.description" rows="5" type="text" name="description" class="form-control" :class="{ 'is-invalid': form.errors.has('description') }"/>
-                  <has-error :form="form" field="description"></has-error>
+                  <label>Status</label>
+                  <select name="status" v-model="form.status" id="status" class="form-control custom-select"
+                  :class="{ 'is-invalid': form.errors.has('status') }">
+                    <option value="">Select Status</option>
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                  </select>
+                  <has-error :form="form" field="status"></has-error>
                 </div>
               </div>
               <div class="modal-footer">
@@ -123,7 +131,7 @@ export default {
       form: new Form({
         id: "",
         name: "",
-        description: "",
+        status: "",
       }),
     };
   },
@@ -166,7 +174,7 @@ export default {
       this.form.reset();
       $("#addNew").modal("show");
     },
-    deleteTask(id) {
+    deleteCategory(id) {
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",

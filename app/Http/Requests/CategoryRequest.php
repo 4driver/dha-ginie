@@ -38,8 +38,8 @@ class CategoryRequest extends FormRequest
     public function createRules(): array
     {
         return [
-            'name' => 'required|string|max:191',
-            'description' => 'required|string|max:191',
+            'name' => 'required|string|max:255',
+            'status' => 'required|integer|in:0,1',
         ];
     }
 
@@ -51,8 +51,8 @@ class CategoryRequest extends FormRequest
     public function updateRules(): array
     {
         return [
-            'name' => 'required|string|max:191',
-            'description' => 'required|string|max:191',
+            'name' => 'required|string|max:255',
+            'status' => 'required|integer|in:0,1',
         ];
     }
 }

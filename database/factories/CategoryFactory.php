@@ -3,10 +3,10 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Task;
+use App\Models\Category;
 use Faker\Provider\Lorem;
 
-class TaskFactory extends Factory
+class CategoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class TaskFactory extends Factory
     {
         return [
             'name' => $this->faker->company,
-            'description' => Lorem::paragraphs(1,true),
+            'status' => true,
         ];
     }
 }

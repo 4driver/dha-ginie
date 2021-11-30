@@ -95,6 +95,7 @@
                 </div>
                 <div class="form-group">
                     <input type="file" @change='upload_image' :class="{ 'is-invalid': form.errors.has('image') }" name="image">
+
                     <has-error :form="form" field="image"></has-error>
                     <div class="image img-fluid img-circle" style="margin-top:10px">
                         <img :src="get_image()" v-bind:style="form.styleObject"/>

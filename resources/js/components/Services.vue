@@ -33,7 +33,7 @@
                   <tr v-for="service in services.data" :key="service.id">
                     <td>{{ service.id }}</td>
                     <td class="text-capitalize">{{ service.name }}</td>
-                    <td>{{ service.category }}</td>
+                    <td>{{ service.category.name }}</td>
                     <td>{{ service.description }}</td>
                     <td>
                       <a href="#" @click="editModal(service)">
@@ -101,34 +101,34 @@
                   />
                   <has-error :form="form" field="name"></has-error>
                 </div>
-                <div class="form-group">
-                  <label>Description</label>
-                  <input
-                    v-model="form.description"
-                    type="text"
-                    name="description"
-                    class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('description') }"
-                  />
-                  <has-error :form="form" field="description"></has-error>
-                </div>
 
                 <div class="form-group">
                   <label>Category</label>
                   <select
-                    name="category"
-                    v-model="form.category"
-                    id="category"
+                    name="category_id"
+                    v-model="form.category_id"
+                    id="category_id"
                     class="form-control custom-select"
-                    :class="{ 'is-invalid': form.errors.has('category') }"
+                    :class="{ 'is-invalid': form.errors.has('category_id') }"
                   >
                     <option value="">Select Category</option>
-                    <option value="cat_1">Category 1</option>
-                    <option value="cat_2">Category 2</option>
+                    <option v-for="category in categories" :key="category.id" :value="category.id">{{category.name}}</option>
                   </select>
-                  <has-error :form="form" field="category"></has-error>
+                  <has-error :form="form" field="category_id"></has-error>
                 </div>
 
+                <div class="form-group">
+                  <label>Description</label>
+                  <textarea
+                    v-model="form.description"
+                    type="text"
+                    name="description"
+                    class="form-control"
+                    rows="5"
+                    :class="{ 'is-invalid': form.errors.has('description') }"
+                  />
+                  <has-error :form="form" field="description"></has-error>
+                </div>
               </div>
               <div class="modal-footer">
                 <button
@@ -164,10 +164,11 @@ export default {
     return {
       editmode: false,
       services: {},
+      categories: {},
       form: new Form({
         id: "",
         name: "",
-        category: "",
+        category_id: "",
         description: "",
       }),
     };
@@ -233,6 +234,15 @@ export default {
         }
       });
     },
+    loadCategories() {
+      this.$Progress.start();
+
+      if (this.$gate.isAdmin()) {
+        axios.get("api/getCategories").then(({ data }) => (this.categories = data.data));
+      }
+
+      this.$Progress.finish();
+    },
     loadServices() {
       this.$Progress.start();
 
@@ -271,6 +281,7 @@ export default {
 
   created() {
     this.$Progress.start();
+    this.loadCategories();
     this.loadServices();
     this.$Progress.finish();
   },

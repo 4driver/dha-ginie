@@ -38,12 +38,9 @@ class ServiceRequest extends FormRequest
     public function createRules(): array
     {
         return [
-            // 'type' => 'required|in:admin,user',
-            'name' => 'required|string|max:191',
-            'description' => 'required|string|max:191',
-            'category' => 'required|string|max:191',
-            // 'email' => 'required|string|email|max:191|unique:users',
-            // 'password' => 'required|string|min:6'
+            'name' => 'required|string|max:255||unique:services',
+            'category_id' => 'required|integer',
+            'description' => 'required|string|max:1000',
         ];
     }
 
@@ -55,11 +52,9 @@ class ServiceRequest extends FormRequest
     public function updateRules(): array
     {
         return [
-            // 'type' => 'sometimes|in:admin,user',
-            'name' => 'required|string|max:191',
-            'description' => 'required|string|max:191',
-            'category' => 'required|string|max:191',
-            // 'email' => 'sometimes|string|email|max:191|unique:users,email,' . $this->get('id')
+            'name' => 'required|string|max:255|unique:services,name,' . $this->get('id'),
+            'category_id' => 'required|integer',
+            'description' => 'required|string|max:1000',
         ];
     }
 }

@@ -110,6 +110,8 @@ class GalleryController extends BaseController
             'image' => 'nullable'
         ]);
 
+        // dd($request->all());
+
         if($request->image){
             $name = time().'.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
             \Image::make($request->image)->save(public_path('uploads/').$name);

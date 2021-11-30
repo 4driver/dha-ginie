@@ -17,8 +17,9 @@ class ServiceFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'category' => $this->faker->company,
+            'category_id' => $this->faker->numberBetween(1,10),
             'description' => Lorem::paragraphs(1,true),
+            'status' => TRUE,
         ];
     }
 }

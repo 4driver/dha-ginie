@@ -32,7 +32,7 @@ class ServiceController extends BaseController
             return $this->unauthorizedResponse();
         }
 
-        $services = Service::latest()->paginate(10);
+        $services = Service::with('category')->orderBy('id','desc')->paginate(10);
 
         return $this->sendResponse($services, 'Services List');
     }
@@ -55,12 +55,7 @@ class ServiceController extends BaseController
      */
     public function store(ServiceRequest $request)
     {
-        $service = Service::create([
-            'name' => $request['name'],
-            'description' => $request['description'],
-            'category' => $request['category'],
-        ]);
-
+        $service = Service::create($request->validated());
         return $this->sendResponse($service, 'Service Created Successfully');
     }
 
@@ -96,7 +91,7 @@ class ServiceController extends BaseController
     public function update(ServiceRequest $request, $id)
     {
         $service = Service::findOrFail($id);
-        $service->update($request->all());
+        $service->update($request->validated());
 
         return $this->sendResponse($service, 'Service has been updated');
     }
