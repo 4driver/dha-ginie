@@ -5,22 +5,21 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends BaseController
 {
-    protected $category = '';
-
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(Category $category)
+    public function __construct()
     {
         $this->middleware('auth:api');
-        $this->category = $category;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -29,60 +28,75 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $categories = $this->category->latest()->paginate(10);
+        if (!Gate::allows('isAdmin')) {
+            return $this->unauthorizedResponse();
+        }
 
-        return $this->sendResponse($categories, 'Category list');
+        $categorys = Category::latest()->paginate(10);
+
+        return $this->sendResponse($categorys, 'Success');
     }
 
     /**
-     * Display a listing of the resource.
+     * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function list()
+    public function create()
     {
-        $categories = $this->category->pluck('name', 'id');
-
-        return $this->sendResponse($categories, 'Category list');
+        //
     }
-
 
     /**
      * Store a newly created resource in storage.
      *
-     *
-     * @param $id
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $tag = $this->category->create([
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-        ]);
-
-        return $this->sendResponse($tag, 'Category Created Successfully');
+        $category = Category::create($request->validated());
+        return $this->sendResponse($category, 'Record added successfully.');
     }
 
     /**
-     * Update the resource in storage
+     * Display the specified resource.
      *
-     * @param $id
-     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id)
+    public function show($id)
     {
-        $tag = $this->category->findOrFail($id);
-
-        $tag->update($request->all());
-
-        return $this->sendResponse($tag, 'Category Information has been updated');
+        //
     }
-        /**
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(CategoryRequest $request, $id)
+    {
+        $category = Category::findOrFail($id);
+        $category->update($request->validated());
+
+        return $this->sendResponse($category, 'Record updated successfully.');
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -90,10 +104,9 @@ class CategoryController extends BaseController
      */
     public function destroy($id)
     {
-
-        $cat = Category::findOrFail($id);
-        $cat->delete();
-
-        return $this->sendResponse([$cat], 'Category has been Deleted');
+        $this->authorize('isAdmin');
+        $category = Category::findOrFail($id);
+        $category->delete();
+        return $this->sendResponse([$category], 'Record has been deleted');
     }
 }

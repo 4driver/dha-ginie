@@ -17,17 +17,18 @@
             </router-link>
         </li>
 
+
         <li class="nav-item">
-            <router-link to="/services" class="nav-link">
+            <router-link to="/categories" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
-                <p>Manage Services</p>
+                <p>Manage Categories</p>
             </router-link>
         </li>
 
         <li class="nav-item">
-            <router-link to="/tasks" class="nav-link">
+            <router-link to="/services" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
-                <p>Manage Tasks</p>
+                <p>Manage Services</p>
             </router-link>
         </li>
 
