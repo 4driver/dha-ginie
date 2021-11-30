@@ -19,7 +19,8 @@
                     <th>Location</th>
                     <th>Date</th>
                     <th>Address</th>
-                    <th>Message</th>
+                    <!-- <th>Message</th> -->
+                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -32,7 +33,12 @@
                     <td>{{ booking.location }}</td>
                     <td>{{ booking.date }}</td>
                     <td>{{ booking.address }}</td>
-                    <td>{{ booking.message }}</td>
+                    <!-- <td>{{ booking.message }}</td> -->
+                    <td>
+                        <span v-if="booking.status == 0" class="badge badge-danger">Rejected</span>
+                        <span v-if="booking.status == 1" class="badge badge-success">Accepted</span>
+                        <span v-if="booking.status == 2" class="badge badge-warning">Pending</span>
+                    </td>
                     <td>
                       <a href="#" @click="editModal(booking)">
                         <i class="fa fa-edit blue"></i>
@@ -86,12 +92,23 @@
               </button>
             </div>
 
-            <form @submit.prevent="editmode ? updateTask() : createBooking()">
+            <form @submit.prevent="editmode ? updateBooking() : createBooking()">
               <div class="modal-body">
                 <div class="form-group">
-                  <label>Name</label>
-                  <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }"/>
-                  <has-error :form="form" field="name"></has-error>
+                    <label>Status</label>
+                    <select
+                        name="status"
+                        v-model="form.status"
+                        id="status"
+                        class="form-control custom-select"
+                        :class="{ 'is-invalid': form.errors.has('status') }"
+                    >
+                        <option value="">Select Status</option>
+                        <option value="0">Rejected</option>
+                        <option value="1">Accepted</option>
+                        <option value="2">Pending</option>
+                    </select>
+                    <has-error :form="form" field="status"></has-error>
                 </div>
               </div>
               <div class="modal-footer">
@@ -115,6 +132,7 @@ export default {
       bookings: {},
       form: new Form({
         id: "",
+        status: "",
       }),
     };
   },
@@ -129,10 +147,10 @@ export default {
 
       this.$Progress.finish();
     },
-    updateTask() {
+    updateBooking() {
       this.$Progress.start();
       this.form
-        .put("api/booking/" + this.form.id)
+        .put("/api/booking/" + this.form.id)
         .then((response) => {
           $("#addNew").modal("hide");
           Toast.fire({

@@ -148,6 +148,7 @@
                   </select>
                   <has-error :form="form" field="type"></has-error>
                 </div>
+
                 <div class="form-group">
                   <label>Permission</label>
                   <select

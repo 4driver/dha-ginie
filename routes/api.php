@@ -19,20 +19,12 @@ Route::get('version', function () {
     return response()->json(['version' => config('app.version')]);
 });
 
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     Log::debug('User:' . serialize($request->user()));
     return $request->user();
 });
 
-
 Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
-    Route::get('profile', 'ProfileController@profile');
-    Route::put('profile', 'ProfileController@updateProfile');
-    Route::post('change-password', 'ProfileController@changePassword');
-    Route::post('product/upload', 'ProductController@upload');
-    Route::get('getCategories', 'CategoryController@getCategories');
-
     Route::apiResources([
         'user' => 'UserController',
         'permission' => 'PermissionController',
@@ -45,4 +37,9 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'gallery' => 'GalleryController',
         'payment' => 'PaymentController',
     ]);
+
+    Route::get('profile', 'ProfileController@profile');
+    Route::put('profile', 'ProfileController@updateProfile');
+    Route::post('change-password', 'ProfileController@changePassword');
+    Route::get('getCategories', 'CategoryController@getCategories');
 });

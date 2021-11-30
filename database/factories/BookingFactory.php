@@ -25,6 +25,7 @@ class BookingFactory extends Factory
             'date' => $this->faker->dateTime($date),
             'address' => $this->faker->address,
             'message' => Lorem::paragraphs(1,true),
+            'status' => 2,
         ];
     }
 }

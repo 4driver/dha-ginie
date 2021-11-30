@@ -19,9 +19,10 @@ class CreateBookingsTable extends Migration
             $table->string('phone');
             $table->string('service');
             $table->string('location');
-            $table->string('date');
+            $table->timestamp('date');
             $table->string('address');
             $table->text('message');
+            $table->tinyInteger('status')->default(2);
             $table->timestamps();
         });
     }

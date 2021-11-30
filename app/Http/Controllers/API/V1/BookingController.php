@@ -31,7 +31,7 @@ class BookingController extends BaseController
         if (!Gate::allows('isAdmin')) {
             return $this->unauthorizedResponse();
         }
-        $bookings = Booking::latest()->paginate(10);
+        $bookings = Booking::orderBy('id','desc')->paginate(10);
         return $this->sendResponse($bookings, 'success');
     }
 
@@ -42,11 +42,7 @@ class BookingController extends BaseController
      */
     public function create(BookingRequest $request)
     {
-        $booking = Booking::create([
-            'title' => $request['title'],
-        ]);
-
-        return $this->sendResponse($booking, 'Booking Created Successfully');
+        //
     }
 
     /**
@@ -55,7 +51,7 @@ class BookingController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookingRequest $request)
     {
         //
     }
@@ -89,9 +85,12 @@ class BookingController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BookingRequest $request, $id)
     {
-        //
+        $booking = Booking::findOrFail($id);
+        $booking->update($request->validated());
+
+        return $this->sendResponse($booking, 'Record updated successfully.');
     }
 
     /**
@@ -102,6 +101,9 @@ class BookingController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('isAdmin');
+        $booking = Booking::findOrFail($id);
+        $booking->delete();
+        return $this->sendResponse([$booking], 'Record has been deleted');
     }
 }
