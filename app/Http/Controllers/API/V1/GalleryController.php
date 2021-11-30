@@ -61,8 +61,11 @@ class GalleryController extends BaseController
         ]);
 
         if($request->image){
+            if (!file_exists('uploads')) {
+                mkdir('uploads', 666, true);
+            }
             $name = time().'.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
-            \Image::make($request->image)->save(public_path('uploads/').$name);
+            \Image::make($request->image)->save('uploads/'.$name);
             $request->merge(['image' => $name]);
         }
 
