@@ -157,7 +157,7 @@
                   <has-error :form="form" field="type"></has-error>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group hidden" id="permission_section">
                   <label>Permission</label>
                   <select
                     name="permission[]"
@@ -173,7 +173,7 @@
                   <has-error :form="form" field="type"></has-error>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group hidden" id="service_section">
                   <label>Services</label>
                   <select
                     name="service[]"
@@ -216,6 +216,12 @@
     </div>
   </section>
 </template>
+
+<style scoped>
+.hidden {
+    display: none;
+}
+</style>
 
 <script>
 export default {
@@ -351,7 +357,25 @@ export default {
   },
 
   mounted() {
-    console.log("USER COMPONENT - SUCCESS");
+      $("#type").change(function (e) {
+          e.preventDefault();
+            var type = $(this).val();
+
+            if(type == 'user' || type == '') {
+                $("#permission_section").addClass('hidden');
+                $("#service_section").addClass('hidden');
+            }
+
+            if(type == 'admin') {
+                $("#permission_section").removeClass('hidden');
+                $("#service_section").addClass('hidden');
+            }
+
+            if(type == 'vendor') {
+                $("#permission_section").addClass('hidden');
+                $("#service_section").removeClass('hidden');
+            }
+      });
   },
 
   created() {
