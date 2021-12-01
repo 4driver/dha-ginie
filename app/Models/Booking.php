@@ -10,4 +10,9 @@ class Booking extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function vendors()
+    {
+        return $this->belongsToMany(User::class, 'booking_vendors');
+    }
 }

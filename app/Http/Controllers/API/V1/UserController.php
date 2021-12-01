@@ -96,14 +96,15 @@ class UserController extends BaseController
      */
     public function destroy($id)
     {
-
         $this->authorize('isAdmin');
-
         $user = User::findOrFail($id);
-        // delete the user
-
         $user->delete();
-
         return $this->sendResponse([$user], 'User has been Deleted');
+    }
+
+    public function getVendorsList()
+    {
+        $vendors = User::where('type','vendor')->orderBy('name','asc')->get();
+        return $this->sendResponse($vendors, 'Success');
     }
 }

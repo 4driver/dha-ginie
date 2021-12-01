@@ -13,9 +13,8 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Vendor</th>
-                    <th>Tasks</th>
-                    <th>Message</th>
+                    <th>Task</th>
+                    <th>Vendors</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -23,8 +22,11 @@
                   <tr v-for="booking in bookings.data" :key="booking.id">
                     <td>{{ booking.id }}</td>
                     <td class="text-capitalize">{{ booking.name }}</td>
-                    <td>{{ booking.service }}</td>
-                    <td>{{ booking.message }}</td>
+                    <td>
+                        <span v-for="vendor in booking.vendors" :key="vendor.id" class="badge badge-primary m-1">
+                            {{vendor.name}}
+                        </span>
+                    </td>
                     <td>
                       <a href="#" @click="editModal(booking)">
                         <i class="fa fa-edit blue"></i>
@@ -81,9 +83,19 @@
             <form @submit.prevent="editmode ? updateTask() : createBooking()">
               <div class="modal-body">
                 <div class="form-group">
-                  <label>Name</label>
-                  <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }"/>
-                  <has-error :form="form" field="name"></has-error>
+                  <label>Vendors</label>
+                  <select
+                    multiple="multiple"
+                    name="vendor_id"
+                    v-model="form.vendor_id"
+                    id="vendor_id"
+                    class="form-control custom-select"
+                    :class="{ 'is-invalid': form.errors.has('vendor_id') }"
+                  >
+                    <option value="">Select Vendor</option>
+                    <option v-for="vendor in vendors" :key="vendor.id" :value="vendor.id">{{vendor.name}}</option>
+                  </select>
+                  <has-error :form="form" field="vendor_id"></has-error>
                 </div>
               </div>
               <div class="modal-footer">
@@ -105,8 +117,10 @@ export default {
     return {
       editmode: false,
       bookings: {},
+      vendors: {},
       form: new Form({
         id: "",
+        vendor_id: "",
       }),
     };
   },
@@ -116,7 +130,7 @@ export default {
       this.$Progress.start();
 
       axios
-        .get("/api/booking?page=" + page)
+        .get("/api/assignment?page=" + page)
         .then(({ data }) => (this.bookings = data.data));
 
       this.$Progress.finish();
@@ -124,7 +138,7 @@ export default {
     updateTask() {
       this.$Progress.start();
       this.form
-        .put("api/booking/" + this.form.id)
+        .put("/api/assignment/" + this.form.id)
         .then((response) => {
           $("#addNew").modal("hide");
           Toast.fire({
@@ -160,7 +174,7 @@ export default {
       }).then((result) => {
         if (result.value) {
           this.form
-            .delete("/api/booking/" + id)
+            .delete("/api/assignment/" + id)
             .then(() => {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
               this.loadBookings();
@@ -174,7 +188,14 @@ export default {
     loadBookings() {
       this.$Progress.start();
       if (this.$gate.isAdmin()) {
-        axios.get("/api/booking").then(({ data }) => (this.bookings = data.data));
+        axios.get("/api/assignment").then(({ data }) => (this.bookings = data.data));
+      }
+      this.$Progress.finish();
+    },
+    loadVendors() {
+      this.$Progress.start();
+      if (this.$gate.isAdmin()) {
+        axios.get("/api/getVendorsList").then(({ data }) => (this.vendors = data.data));
       }
       this.$Progress.finish();
     },
@@ -205,6 +226,7 @@ export default {
 
   created() {
     this.$Progress.start();
+    this.loadVendors();
     this.loadBookings();
     this.$Progress.finish();
   },

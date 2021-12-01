@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Booking;
+use App\Models\User;
 
 class AssignmentController extends BaseController
 {
@@ -29,7 +30,7 @@ class AssignmentController extends BaseController
         if (!Gate::allows('isAdmin')) {
             return $this->unauthorizedResponse();
         }
-        $bookings = Booking::latest()->paginate(10);
+        $bookings = Booking::with('vendors')->orderBy('id','desc')->paginate(10);
         return $this->sendResponse($bookings, 'success');
     }
 
@@ -38,13 +39,9 @@ class AssignmentController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(BookingRequest $request)
+    public function create(Request $request)
     {
-        $booking = Booking::create([
-            'title' => $request['title'],
-        ]);
-
-        return $this->sendResponse($booking, 'Booking Created Successfully');
+        //
     }
 
     /**
@@ -89,7 +86,16 @@ class AssignmentController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        //
+        $booking = Booking::findOrFail($id);
+
+        if ($request->has('vendor_id')) {
+            $vendors = User::whereIn('id', $request->vendor_id)->get();
+            $booking->vendors()->attach($vendors);
+        }
+
+        // $booking->update($request->validated());
+
+        return $this->sendResponse($booking, 'Record updated successfully.');
     }
 
     /**
@@ -100,6 +106,9 @@ class AssignmentController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('isAdmin');
+        $booking = Booking::findOrFail($id);
+        $booking->delete();
+        return $this->sendResponse([$booking], 'Record has been deleted');
     }
 }

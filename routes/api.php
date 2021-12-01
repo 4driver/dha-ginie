@@ -36,10 +36,12 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'faq' => 'FaqController',
         'gallery' => 'GalleryController',
         'payment' => 'PaymentController',
+        'assignment' => 'AssignmentController',
     ]);
 
     Route::get('profile', 'ProfileController@profile');
     Route::put('profile', 'ProfileController@updateProfile');
     Route::post('change-password', 'ProfileController@changePassword');
     Route::get('getCategories', 'CategoryController@getCategories');
+    Route::get('getVendorsList', 'UserController@getVendorsList');
 });
