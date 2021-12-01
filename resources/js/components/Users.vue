@@ -158,37 +158,42 @@
                 </div>
 
                 <div class="form-group hidden" id="permission_section">
-                  <label>Permission</label>
-                  <select
-                    name="permission[]"
-                    v-model="form.permission"
-                    id="permission"
-                    class="form-control custom-select"
-                    :class="{ 'is-invalid': form.errors.has('permission') }"
-                    multiple="multiple"
-                  >
-                    <option value="">Select Permission</option>
-                    <option v-for="permission in permissions" :key="permission.id" :value="permission.id">{{permission.name}}</option>
-                  </select>
+                    <label>Permission</label>
+                    <div class="select2-purple">
+                        <select
+                            name="permission[]"
+                            v-model="form.permission"
+                            id="permission"
+                            :class="{ 'is-invalid': form.errors.has('permission') }"
+                            multiple="multiple"
+                            class="select2"
+                            data-placeholder="Select a State" style="width: 100%;"
+                        >
+                            <option value="">Select Permission</option>
+                            <option v-for="permission in permissions" :key="permission.id" :value="permission.id">{{permission.name}}</option>
+                        </select>
+                    </div>
                   <has-error :form="form" field="type"></has-error>
                 </div>
 
                 <div class="form-group hidden" id="service_section">
                   <label>Services</label>
-                  <select
-                    name="service[]"
-                    v-model="form.service"
-                    id="service"
-                    class="form-control custom-select"
-                    :class="{ 'is-invalid': form.errors.has('service') }"
-                    multiple="multiple"
-                  >
-                    <option value="">Select Service</option>
-                    <option v-for="service in services" :key="service.id" :value="service.id">{{service.name}}</option>
-                  </select>
+                <div class="select2-purple">
+                    <select
+                        name="service[]"
+                        v-model="form.service"
+                        id="service"
+                        :class="{ 'is-invalid': form.errors.has('service') }"
+                        multiple="multiple"
+                        class="select2"
+                        data-placeholder="Select a State" style="width: 100%;"
+                    >
+                        <option value="">Select Service</option>
+                        <option v-for="service in services" :key="service.id" :value="service.id">{{service.name}}</option>
+                    </select>
+                </div>
                   <has-error :form="form" field="type"></has-error>
                 </div>
-
               </div>
               <div class="modal-footer">
                 <button
@@ -357,7 +362,7 @@ export default {
   },
 
   mounted() {
-      $("#type").change(function (e) {
+    $("#type").change(function (e) {
           e.preventDefault();
             var type = $(this).val();
 
@@ -376,6 +381,12 @@ export default {
                 $("#service_section").removeClass('hidden');
             }
       });
+
+    $('.select2').select2()
+
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
   },
 
   created() {
