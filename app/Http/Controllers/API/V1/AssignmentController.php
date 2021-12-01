@@ -89,11 +89,10 @@ class AssignmentController extends BaseController
         $booking = Booking::findOrFail($id);
 
         if ($request->has('vendor_id')) {
+            $booking->vendors()->detach();
             $vendors = User::whereIn('id', $request->vendor_id)->get();
             $booking->vendors()->attach($vendors);
         }
-
-        // $booking->update($request->validated());
 
         return $this->sendResponse($booking, 'Record updated successfully.');
     }

@@ -34,7 +34,7 @@ class UsersTableSeeder extends Seeder
             'name' =>'Moiz Chauhdry',
             'email' =>'moizchauhdry@gmail.com',
             'password'=>Hash::make('password'),
-            'type' =>'customer',
+            'type' =>'user',
             'phone' =>'+92-320-4650584',
             'created_at'=>Carbon::now(),
             'updated_at'=>Carbon::now(),
