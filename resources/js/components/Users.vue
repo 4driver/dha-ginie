@@ -27,7 +27,8 @@
                     <th>Type</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Created</th>
+                    <th>Permissions</th>
+                    <th>Services</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -37,7 +38,16 @@
                     <td class="text-capitalize">{{ user.type }}</td>
                     <td class="text-capitalize">{{ user.name }}</td>
                     <td>{{ user.email }}</td>
-                    <td>{{ user.created_at }}</td>
+                    <td>
+                        <span v-for="permission in user.permissions" :key="permission.id" class="badge badge-primary mr-1 pt-1">
+                            {{permission.name}}
+                        </span>
+                    </td>
+                    <td>
+                        <span v-for="service in user.services" :key="service.id" class="badge badge-success mr-1 pt-1">
+                            {{service.name}}
+                        </span>
+                    </td>
 
                     <td>
                       <a href="#" @click="editModal(user)">
@@ -91,8 +101,6 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-
-            <!-- <form @submit.prevent="createUser"> -->
 
             <form @submit.prevent="editmode ? updateUser() : createUser()">
               <div class="modal-body">
@@ -164,6 +172,23 @@
                   </select>
                   <has-error :form="form" field="type"></has-error>
                 </div>
+
+                <div class="form-group">
+                  <label>Services</label>
+                  <select
+                    name="service[]"
+                    v-model="form.service"
+                    id="service"
+                    class="form-control custom-select"
+                    :class="{ 'is-invalid': form.errors.has('service') }"
+                    multiple="multiple"
+                  >
+                    <option value="">Select Service</option>
+                    <option v-for="service in services" :key="service.id" :value="service.id">{{service.name}}</option>
+                  </select>
+                  <has-error :form="form" field="type"></has-error>
+                </div>
+
               </div>
               <div class="modal-footer">
                 <button
@@ -199,10 +224,12 @@ export default {
       editmode: false,
       users: {},
       permissions: {},
+      services: {},
       form: new Form({
         id: "",
         type: "",
         permission: [],
+        service: [],
         name: "",
         email: "",
         password: "",
@@ -289,7 +316,14 @@ export default {
       if (this.$gate.isAdmin()) {
         axios.get("api/permission").then(({ data }) => (this.permissions = data.data));
       }
+      this.$Progress.finish();
+    },
 
+    loadServices() {
+      this.$Progress.start();
+      if (this.$gate.isAdmin()) {
+        axios.get("api/getServicesList").then(({ data }) => (this.services = data.data));
+      }
       this.$Progress.finish();
     },
 
@@ -324,6 +358,7 @@ export default {
     this.$Progress.start();
     this.loadUsers();
     this.loadPermissions();
+    this.loadServices();
     this.$Progress.finish();
   },
 };

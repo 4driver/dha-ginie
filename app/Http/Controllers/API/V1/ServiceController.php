@@ -109,4 +109,10 @@ class ServiceController extends BaseController
         $service->delete();
         return $this->sendResponse([$service], 'Service has been Deleted');
     }
+
+    public function getServicesList()
+    {
+        $servcies = Service::orderBy('name','asc')->get();
+        return $this->sendResponse($servcies, 'Success');
+    }
 }

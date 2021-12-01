@@ -44,4 +44,5 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::post('change-password', 'ProfileController@changePassword');
     Route::get('getCategories', 'CategoryController@getCategories');
     Route::get('getVendorsList', 'UserController@getVendorsList');
+    Route::get('getServicesList', 'ServiceController@getServicesList');
 });

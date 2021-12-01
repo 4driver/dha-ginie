@@ -5,8 +5,9 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Requests\Users\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
-use App\Models\User;
 use App\Models\Permission;
+use App\Models\Service;
+use App\Models\User;
 
 class UserController extends BaseController
 {
@@ -30,11 +31,8 @@ class UserController extends BaseController
         if (!Gate::allows('isAdmin')) {
             return $this->unauthorizedResponse();
         }
-        // $this->authorize('isAdmin');
-
-        $users = User::latest()->paginate(10);
-
-        return $this->sendResponse($users, 'User Created Successfully');
+        $users = User::with(['permissions','services'])->orderBy('id','desc')->paginate(10);
+        return $this->sendResponse($users, 'Success');
     }
 
     /**
@@ -61,6 +59,11 @@ class UserController extends BaseController
             $user->permissions()->attach($permissions);
         }
 
+        if ($request->has('service')) {
+            $services = Service::whereIn('id', $request->service)->get();
+            $user->services()->attach($services);
+        }
+
         return $this->sendResponse($user, 'User Created Successfully');
     }
 
@@ -82,6 +85,18 @@ class UserController extends BaseController
         }
 
         $user->update($request->all());
+
+        if ($request->has('permission')) {
+            $user->permissions()->detach();
+            $permissions = User::whereIn('id', $request->permission)->get();
+            $user->permissions()->attach($permissions);
+        }
+
+        if ($request->has('service')) {
+            $user->services()->detach();
+            $services = Service::whereIn('id', $request->service)->get();
+            $user->services()->attach($services);
+        }
 
         return $this->sendResponse($user, 'User Information has been updated');
     }

@@ -19,7 +19,7 @@ class User extends Authenticatable // implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'type'
+        'name', 'email', 'password', 'type',
     ];
 
     /**
@@ -78,6 +78,11 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'user_permissions');
+    }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'user_services');
     }
 
 }
