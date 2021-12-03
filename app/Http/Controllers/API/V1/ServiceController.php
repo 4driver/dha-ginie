@@ -112,7 +112,7 @@ class ServiceController extends BaseController
 
     public function getServicesList()
     {
-        $servcies = Service::orderBy('name','asc')->get();
+        $servcies = Service::select('id','name')->orderBy('name','asc')->get()->toArray();
         return $this->sendResponse($servcies, 'Success');
     }
 }

@@ -78,13 +78,14 @@ class UserController extends BaseController
      */
     public function update(UserRequest $request, $id)
     {
+        // dd($request->all());
+
         $user = User::findOrFail($id);
 
         if (!empty($request->password)) {
             $request->merge(['password' => Hash::make($request['password'])]);
         }
 
-        $user->update($request->all());
 
         if ($request->has('permission')) {
             $user->permissions()->detach();
@@ -92,11 +93,14 @@ class UserController extends BaseController
             $user->permissions()->attach($permissions);
         }
 
-        if ($request->has('service')) {
+        if ($request->has('selectedServices')) {
+            $ids = array_column($request->selectedServices, 'id');
             $user->services()->detach();
-            $services = Service::whereIn('id', $request->service)->get();
-            $user->services()->attach($services);
+            // $services = Service::whereIn('id', $ids)->get();
+            $user->services()->attach($ids);
         }
+
+        $user->update($request->all());
 
         return $this->sendResponse($user, 'User Information has been updated');
     }
@@ -119,5 +123,12 @@ class UserController extends BaseController
     {
         $vendors = User::where('type','vendor')->orderBy('name','asc')->get();
         return $this->sendResponse($vendors, 'Success');
+    }
+
+    public function getSelectedServices()
+    {
+        // dd($id);
+        $servcies = Service::select('id','name')->orderBy('name','asc')->take(3)->get()->toArray();
+        return $this->sendResponse($servcies, 'Success');
     }
 }

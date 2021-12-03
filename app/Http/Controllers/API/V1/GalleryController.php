@@ -108,22 +108,22 @@ class GalleryController extends BaseController
      */
     public function update(Request $request, $id)
     {
+        $gallery = Gallery::find($id);
+
         $this->validate($request, [
             'title' => 'required',
             'image' => 'nullable'
         ]);
 
-        // dd($request->all());
 
-        if($request->image){
+        if($request->image && ($gallery->image != $request->image)){
             $name = time().'.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
             \Image::make($request->image)->save(public_path('uploads/').$name);
             $request->merge(['image' => $name]);
+            $gallery->image = $name;
         }
 
-        $gallery = Gallery::find($id);
         $gallery->title = $request->title;
-        $gallery->image = $name;
         $gallery->save();
 
         return $this->sendResponse($gallery, 'Record updated successfully.');
