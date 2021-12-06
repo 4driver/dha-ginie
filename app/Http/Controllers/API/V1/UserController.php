@@ -47,7 +47,6 @@ class UserController extends BaseController
      */
     public function store(UserRequest $request)
     {
-        // dd($request->all());
 
         $user = User::create($request->validated());
         $user->update(['password' => Hash::make($request['password'])]);
@@ -76,7 +75,6 @@ class UserController extends BaseController
      */
     public function update(UserRequest $request, $id)
     {
-
         $user = User::findOrFail($id);
 
         if (!empty($request->password)) {

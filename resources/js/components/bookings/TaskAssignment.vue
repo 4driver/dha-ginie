@@ -23,7 +23,7 @@
                     <td>{{ booking.id }}</td>
                     <td class="text-capitalize">{{ booking.name }}</td>
                     <td>
-                        <span v-for="vendor in booking.vendors" :key="vendor.id" class="badge badge-primary m-1">
+                        <span v-for="vendor in booking.vendors" :key="vendor.id" class="badge badge-success m-1">
                             {{vendor.name}}
                         </span>
                     </td>
@@ -68,8 +68,8 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" v-show="!editmode">Add New Booking</h5>
-              <h5 class="modal-title" v-show="editmode">Update Booking</h5>
+              <h5 class="modal-title" v-show="!editmode">Add New Task</h5>
+              <h5 class="modal-title" v-show="editmode">Update Task</h5>
               <button
                 type="button"
                 class="close"
@@ -83,19 +83,9 @@
             <form @submit.prevent="editmode ? updateTask() : createBooking()">
               <div class="modal-body">
                 <div class="form-group">
-                  <label>Vendors</label>
-                  <select
-                    multiple="multiple"
-                    name="vendor_id"
-                    v-model="form.vendor_id"
-                    id="vendor_id"
-                    class="form-control custom-select"
-                    :class="{ 'is-invalid': form.errors.has('vendor_id') }"
-                  >
-                    <option value="">Select Vendor</option>
-                    <option v-for="vendor in vendors" :key="vendor.id" :value="vendor.id">{{vendor.name}}</option>
-                  </select>
-                  <has-error :form="form" field="vendor_id"></has-error>
+                    <label>Vendors</label>
+                    <multiselect v-model="selectedVendors" :options="vendors" :multiple="true" track-by="id" label="name"></multiselect>
+                    <has-error :form="form" field="vendor"></has-error>
                 </div>
               </div>
               <div class="modal-footer">
@@ -111,124 +101,142 @@
   </section>
 </template>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
 <script>
-export default {
-  data() {
-    return {
-      editmode: false,
-      bookings: {},
-      vendors: {},
-      form: new Form({
-        id: "",
-        vendor_id: "",
-      }),
+
+    import Multiselect from 'vue-multiselect'
+
+    export default {
+
+        components: { Multiselect },
+
+        data() {
+            return {
+            editmode: false,
+            bookings: {},
+            vendors: [],
+            selectedVendors: [],
+            form: new Form({
+                id: "",
+                vendor_id: "",
+            }),
+            };
+        },
+
+        methods: {
+            getResults(page = 1) {
+            this.$Progress.start();
+            axios
+                .get("/api/assignment?page=" + page)
+                .then(({ data }) => (this.bookings = data.data));
+
+            this.$Progress.finish();
+            },
+            updateTask() {
+                this.$Progress.start();
+                this.form.vendor_id = this.selectedVendors;
+                this.form
+                    .put("/api/assignment/" + this.form.id)
+                    .then((response) => {
+                    $("#addNew").modal("hide");
+                    Toast.fire({
+                        icon: "success",
+                        title: response.data.message,
+                    });
+                    this.$Progress.finish();
+                    this.loadBookings();
+                    })
+                    .catch(() => {
+                    this.$Progress.fail();
+                    });
+            },
+            editModal(user) {
+                this.editmode = true;
+                this.form.reset();
+                $("#addNew").modal("show");
+                this.form.fill(user);
+                this.loadSelectedVendors(this.form.id)
+            },
+            newModal() {
+                this.editmode = false;
+                this.form.reset();
+                $("#addNew").modal("show");
+            },
+            deleteBooking(id) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!",
+                }).then((result) => {
+                    if (result.value) {
+                    this.form
+                        .delete("/api/assignment/" + id)
+                        .then(() => {
+                        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+                        this.loadBookings();
+                        })
+                        .catch((data) => {
+                        Swal.fire("Failed!", data.message, "warning");
+                        });
+                    }
+                });
+            },
+            loadBookings() {
+                this.$Progress.start();
+                if (this.$gate.isAdmin()) {
+                    axios.get("/api/assignment").then(({ data }) => (this.bookings = data.data));
+                }
+                this.$Progress.finish();
+            },
+            loadVendors() {
+                this.$Progress.start();
+                if (this.$gate.isAdmin()) {
+                    axios.get("/api/getVendorsList").then(({ data }) => (this.vendors = data.data));
+                }
+                this.$Progress.finish();
+            },
+            createBooking() {
+                this.form
+                    .post("api/booking")
+                    .then((response) => {
+                    $("#addNew").modal("hide");
+                    Toast.fire({
+                        icon: "success",
+                        title: response.data.message,
+                    });
+                    this.$Progress.finish();
+                    this.loadBookings();
+                    })
+                    .catch(() => {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Some error occured! Please try again",
+                    });
+                });
+            },
+
+            loadSelectedVendors(id) {
+                this.$Progress.start();
+                if (this.$gate.isAdmin()) {
+                    axios.get("/api/getSelectedVendors/" + id).then(({ data }) => (this.selectedVendors = data.data));
+                }
+                this.$Progress.finish();
+            },
+        },
+
+        mounted() {
+            console.log("BOOKING COMPONENT - SUCCESS");
+        },
+
+        created() {
+            this.$Progress.start();
+            this.loadVendors();
+            this.loadBookings();
+            this.$Progress.finish();
+        },
     };
-  },
-
-  methods: {
-    getResults(page = 1) {
-      this.$Progress.start();
-
-      axios
-        .get("/api/assignment?page=" + page)
-        .then(({ data }) => (this.bookings = data.data));
-
-      this.$Progress.finish();
-    },
-    updateTask() {
-      this.$Progress.start();
-      this.form
-        .put("/api/assignment/" + this.form.id)
-        .then((response) => {
-          $("#addNew").modal("hide");
-          Toast.fire({
-            icon: "success",
-            title: response.data.message,
-          });
-          this.$Progress.finish();
-          this.loadBookings();
-        })
-        .catch(() => {
-          this.$Progress.fail();
-        });
-    },
-    editModal(user) {
-      this.editmode = true;
-      this.form.reset();
-      $("#addNew").modal("show");
-      this.form.fill(user);
-    },
-    newModal() {
-      this.editmode = false;
-      this.form.reset();
-      $("#addNew").modal("show");
-    },
-    deleteBooking(id) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
-        if (result.value) {
-          this.form
-            .delete("/api/assignment/" + id)
-            .then(() => {
-              Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              this.loadBookings();
-            })
-            .catch((data) => {
-              Swal.fire("Failed!", data.message, "warning");
-            });
-        }
-      });
-    },
-    loadBookings() {
-      this.$Progress.start();
-      if (this.$gate.isAdmin()) {
-        axios.get("/api/assignment").then(({ data }) => (this.bookings = data.data));
-      }
-      this.$Progress.finish();
-    },
-    loadVendors() {
-      this.$Progress.start();
-      if (this.$gate.isAdmin()) {
-        axios.get("/api/getVendorsList").then(({ data }) => (this.vendors = data.data));
-      }
-      this.$Progress.finish();
-    },
-    createBooking() {
-      this.form
-        .post("api/booking")
-        .then((response) => {
-          $("#addNew").modal("hide");
-          Toast.fire({
-            icon: "success",
-            title: response.data.message,
-          });
-          this.$Progress.finish();
-          this.loadBookings();
-        })
-        .catch(() => {
-          Toast.fire({
-            icon: "error",
-            title: "Some error occured! Please try again",
-          });
-        });
-    },
-  },
-
-  mounted() {
-    console.log("BOOKING COMPONENT - SUCCESS");
-  },
-
-  created() {
-    this.$Progress.start();
-    this.loadVendors();
-    this.loadBookings();
-    this.$Progress.finish();
-  },
-};
 </script>

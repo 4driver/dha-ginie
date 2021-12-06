@@ -47,4 +47,5 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('getServicesList', 'ServiceController@getServicesList');
     Route::get('getSelectedServices/{id}', 'UserController@getSelectedServices');
     Route::get('getSelectedPermissions/{id}', 'UserController@getSelectedPermissions');
+    Route::get('getSelectedVendors/{id}', 'AssignmentController@getSelectedVendors');
 });

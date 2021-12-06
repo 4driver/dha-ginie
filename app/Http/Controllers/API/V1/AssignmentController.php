@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\AssignmentRequest;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Booking;
 use App\Models\User;
@@ -84,13 +84,13 @@ class AssignmentController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AssignmentRequest $request, $id)
     {
         $booking = Booking::findOrFail($id);
 
         if ($request->has('vendor_id')) {
             $booking->vendors()->detach();
-            $vendors = User::whereIn('id', $request->vendor_id)->get();
+            $vendors = array_column($request->vendor_id, 'id');
             $booking->vendors()->attach($vendors);
         }
 
@@ -109,5 +109,16 @@ class AssignmentController extends BaseController
         $booking = Booking::findOrFail($id);
         $booking->delete();
         return $this->sendResponse([$booking], 'Record has been deleted');
+    }
+
+    public function getSelectedVendors($id)
+    {
+        $booking = Booking::with(['vendors' => function ($query) {
+           return $query->select('users.id','users.name');
+        }])->find($id);
+
+        $vendors = $booking->vendors->toArray();
+
+        return $this->sendResponse($vendors, 'Success');
     }
 }
