@@ -39,7 +39,7 @@
                     <td class="text-capitalize">{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>
-                        <span v-for="permission in user.permissions" :key="permission.id" class="badge badge-primary mr-1 pt-1">
+                        <span v-for="permission in user.permissions" :key="permission.id" class="badge badge-success mr-1 pt-1">
                             {{permission.name}}
                         </span>
                     </td>
@@ -121,7 +121,7 @@
                     v-model="form.email"
                     type="text"
                     name="email"
-                    class="form-control"
+                    class="form-control email"
                     :class="{ 'is-invalid': form.errors.has('email') }"
                   />
                   <has-error :form="form" field="email"></has-error>
@@ -146,7 +146,7 @@
                     name="type"
                     v-model="form.type"
                     id="type"
-                    class="form-control custom-select"
+                    class="form-control custom-select type"
                     :class="{ 'is-invalid': form.errors.has('type') }"
                   >
                     <option value="">Select User Role</option>
@@ -157,13 +157,13 @@
                   <has-error :form="form" field="type"></has-error>
                 </div>
 
-                <div class="form-group hidden" id="permission_section">
+                <div class="form-group hidden permission_section">
                     <label>Permissions</label>
                     <multiselect v-model="selectedPermissions" :options="permissions" :multiple="true" track-by="id" label="name"></multiselect>
                     <has-error :form="form" field="permission"></has-error>
                 </div>
 
-                <div class="form-group hidden" id="service_section">
+                <div class="form-group hidden service_section">
                     <label>Services</label>
                     <multiselect v-model="selectedServices" :options="services" :multiple="true" track-by="id" label="name"></multiselect>
                     <has-error :form="form" field="service"></has-error>
@@ -270,6 +270,24 @@ export default {
             this.form.fill(user);
             this.loadSelectedPermissions(this.form.id);
             this.loadSelectedServices(this.form.id);
+
+            $(".email").attr('disabled', true);
+            $(".type").attr('disabled', true);
+
+            if (this.form.type == 'admin') {
+                $(".permission_section").show();
+                $(".service_section").hide();
+            }
+
+            if (this.form.type == 'vendor') {
+                $(".permission_section").hide();
+                $(".service_section").show();
+            }
+
+            if (this.form.type == 'user') {
+                $(".permission_section").hide();
+                $(".service_section").hide();
+            }
         },
 
         newModal() {
@@ -373,23 +391,23 @@ export default {
     },
 
     mounted() {
-        $("#type").change(function (e) {
+        $(".type").change(function (e) {
             e.preventDefault();
                 var type = $(this).val();
 
                 if(type == 'user' || type == '') {
-                    $("#permission_section").addClass('hidden');
-                    $("#service_section").addClass('hidden');
+                    $(".permission_section").addClass('hidden');
+                    $(".service_section").addClass('hidden');
                 }
 
                 if(type == 'admin') {
-                    $("#permission_section").removeClass('hidden');
-                    $("#service_section").addClass('hidden');
+                    $(".permission_section").removeClass('hidden');
+                    $(".service_section").addClass('hidden');
                 }
 
                 if(type == 'vendor') {
-                    $("#permission_section").addClass('hidden');
-                    $("#service_section").removeClass('hidden');
+                    $(".permission_section").addClass('hidden');
+                    $(".service_section").removeClass('hidden');
                 }
         });
 
