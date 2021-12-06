@@ -158,42 +158,17 @@
                 </div>
 
                 <div class="form-group hidden" id="permission_section">
-                    <label>Permission</label>
-                    <div class="select2-purple">
-                        <select
-                            name="permission[]"
-                            v-model="form.permission"
-                            id="permission"
-                            :class="{ 'is-invalid': form.errors.has('permission') }"
-                            multiple="multiple"
-                            class="select2"
-                            data-placeholder="Select a State" style="width: 100%;"
-                        >
-                            <option value="">Select Permission</option>
-                            <option v-for="permission in permissions" :key="permission.id" :value="permission.id">{{permission.name}}</option>
-                        </select>
-                    </div>
-                  <has-error :form="form" field="type"></has-error>
+                    <label>Permissions</label>
+                    <multiselect v-model="selectedPermissions" :options="permissions" :multiple="true" track-by="id" label="name"></multiselect>
+                    <has-error :form="form" field="permission"></has-error>
                 </div>
 
                 <div class="form-group hidden" id="service_section">
-                  <label>Services</label>
-                <div class="select2-purple">
-                    <select
-                        name="service[]"
-                        v-model="form.service"
-                        id="service"
-                        :class="{ 'is-invalid': form.errors.has('service') }"
-                        multiple="multiple"
-                        class="select2"
-                        data-placeholder="Select a State" style="width: 100%;"
-                    >
-                        <option value="">Select Service</option>
-                        <option v-for="service in services" :key="service.id" :value="service.id">{{service.name}}</option>
-                    </select>
+                    <label>Services</label>
+                    <multiselect v-model="selectedServices" :options="services" :multiple="true" track-by="id" label="name"></multiselect>
+                    <has-error :form="form" field="service"></has-error>
                 </div>
-                  <has-error :form="form" field="type"></has-error>
-                </div>
+
               </div>
               <div class="modal-footer">
                 <button
@@ -227,174 +202,210 @@
     display: none;
 }
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <script>
+  import Multiselect from 'vue-multiselect'
+
 export default {
-  data() {
-    return {
-      editmode: false,
-      users: {},
-      permissions: {},
-      services: {},
-      form: new Form({
-        id: "",
-        type: "",
-        permission: [],
-        service: [],
-        name: "",
-        email: "",
-        password: "",
-      }),
-    };
-  },
+    components: { Multiselect },
 
-  methods: {
-
-    getResults(page = 1) {
-      this.$Progress.start();
-
-      axios
-        .get("api/user?page=" + page)
-        .then(({ data }) => (this.users = data.data));
-
-      this.$Progress.finish();
+    data() {
+        return {
+            editmode: false,
+            users: {},
+            permissions: [],
+            selectedPermissions:[],
+            selectedServices:[],
+            services: [],
+            form: new Form({
+                id: "",
+                type: "",
+                permission: [],
+                service: [],
+                name: "",
+                email: "",
+                password: "",
+            }),
+        };
     },
 
-    updateUser() {
-      this.$Progress.start();
-      this.form
-        .put("api/user/" + this.form.id)
-        .then((response) => {
-          $("#addNew").modal("hide");
-          Toast.fire({
-            icon: "success",
-            title: response.data.message,
-          });
-          this.$Progress.finish();
-          this.loadUsers();
-        })
-        .catch(() => {
-          this.$Progress.fail();
-        });
-    },
+    methods: {
 
-    editModal(user) {
-      this.editmode = true;
-      this.form.reset();
-      $("#addNew").modal("show");
-      this.form.fill(user);
-    },
+        getResults(page = 1) {
+        this.$Progress.start();
 
-    newModal() {
-      this.editmode = false;
-      this.form.reset();
-      $("#addNew").modal("show");
-    },
+        axios
+            .get("api/user?page=" + page)
+            .then(({ data }) => (this.users = data.data));
 
-    deleteUser(id) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
-        if (result.value) {
-          this.form
-            .delete("api/user/" + id)
-            .then(() => {
-              Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              this.loadUsers();
-            })
-            .catch((data) => {
-              Swal.fire("Failed!", data.message, "warning");
+        this.$Progress.finish();
+        },
+
+        updateUser() {
+        this.$Progress.start();
+        this.form.service = this.selectedServices;
+        this.form.permission = this.selectedPermissions;
+
+        this.form
+            .put("api/user/" + this.form.id)
+            .then((response) => {
+            $("#addNew").modal("hide");
+            Toast.fire({
+                icon: "success",
+                title: response.data.message,
             });
-        }
-      });
-    },
+            this.$Progress.finish();
+            this.loadUsers();
+            })
+            .catch(() => {
+            this.$Progress.fail();
+            });
+        },
 
-    loadUsers() {
-      this.$Progress.start();
-      if (this.$gate.isAdmin()) {
-        axios.get("api/user").then(({ data }) => (this.users = data.data));
-      }
-      this.$Progress.finish();
-    },
+        editModal(user) {
+            this.editmode = true;
+            this.form.reset();
+            $("#addNew").modal("show");
+            this.form.fill(user);
+            this.loadSelectedPermissions(this.form.id);
+            this.loadSelectedServices(this.form.id);
+        },
 
-    loadPermissions() {
-      this.$Progress.start();
-      if (this.$gate.isAdmin()) {
-        axios.get("api/permission").then(({ data }) => (this.permissions = data.data));
-      }
-      this.$Progress.finish();
-    },
+        newModal() {
+            this.editmode = false;
+            this.form.reset();
+            this.selectedPermissions = [];
+            this.selectedServices = [];
+            $("#addNew").modal("show");
+        },
 
-    loadServices() {
-      this.$Progress.start();
-      if (this.$gate.isAdmin()) {
-        axios.get("api/getServicesList").then(({ data }) => (this.services = data.data));
-      }
-      this.$Progress.finish();
-    },
-
-    createUser() {
-      this.form
-        .post("api/user")
-        .then((response) => {
-          $("#addNew").modal("hide");
-
-          Toast.fire({
-            icon: "success",
-            title: response.data.message,
-          });
-
-          this.$Progress.finish();
-          this.loadUsers();
-        })
-        .catch(() => {
-          Toast.fire({
-            icon: "error",
-            title: "Some error occured! Please try again",
-          });
+        deleteUser(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.value) {
+            this.form
+                .delete("api/user/" + id)
+                .then(() => {
+                Swal.fire("Deleted!", "Your file has been deleted.", "success");
+                this.loadUsers();
+                })
+                .catch((data) => {
+                Swal.fire("Failed!", data.message, "warning");
+                });
+            }
         });
+        },
+
+        loadUsers() {
+            this.$Progress.start();
+            if (this.$gate.isAdmin()) {
+                axios.get("api/user").then(({ data }) => (this.users = data.data));
+            }
+            this.$Progress.finish();
+        },
+
+        loadPermissions() {
+            this.$Progress.start();
+            if (this.$gate.isAdmin()) {
+                axios.get("api/permission").then(({ data }) => (this.permissions = data.data));
+            }
+            this.$Progress.finish();
+        },
+
+        loadServices() {
+            this.$Progress.start();
+            if (this.$gate.isAdmin()) {
+                axios.get("api/getServicesList").then(({ data }) => (this.services = data.data));
+            }
+            this.$Progress.finish();
+        },
+
+        loadSelectedPermissions(id) {
+            this.$Progress.start();
+            if (this.$gate.isAdmin()) {
+                axios.get("api/getSelectedPermissions/" + id).then(({ data }) => (this.selectedPermissions = data.data));
+                console.log(this.selectedPermissions);
+            }
+            this.$Progress.finish();
+        },
+
+        loadSelectedServices(id) {
+            this.$Progress.start();
+            if (this.$gate.isAdmin()) {
+                axios.get("api/getSelectedServices/" + id).then(({ data }) => (this.selectedServices = data.data));
+                console.log(this.selectedServices);
+            }
+            this.$Progress.finish();
+        },
+
+        createUser() {
+
+        this.form.service = this.selectedServices;
+        this.form.permission = this.selectedPermissions;
+
+        this.form
+            .post("api/user")
+            .then((response) => {
+            $("#addNew").modal("hide");
+
+            Toast.fire({
+                icon: "success",
+                title: response.data.message,
+            });
+
+            this.$Progress.finish();
+            this.loadUsers();
+            })
+            .catch(() => {
+            Toast.fire({
+                icon: "error",
+                title: "Some error occured! Please try again",
+            });
+            });
+        },
     },
-  },
 
-  mounted() {
-    $("#type").change(function (e) {
-          e.preventDefault();
-            var type = $(this).val();
+    mounted() {
+        $("#type").change(function (e) {
+            e.preventDefault();
+                var type = $(this).val();
 
-            if(type == 'user' || type == '') {
-                $("#permission_section").addClass('hidden');
-                $("#service_section").addClass('hidden');
-            }
+                if(type == 'user' || type == '') {
+                    $("#permission_section").addClass('hidden');
+                    $("#service_section").addClass('hidden');
+                }
 
-            if(type == 'admin') {
-                $("#permission_section").removeClass('hidden');
-                $("#service_section").addClass('hidden');
-            }
+                if(type == 'admin') {
+                    $("#permission_section").removeClass('hidden');
+                    $("#service_section").addClass('hidden');
+                }
 
-            if(type == 'vendor') {
-                $("#permission_section").addClass('hidden');
-                $("#service_section").removeClass('hidden');
-            }
-      });
+                if(type == 'vendor') {
+                    $("#permission_section").addClass('hidden');
+                    $("#service_section").removeClass('hidden');
+                }
+        });
 
-    $('.select2').select2()
+        $('.select2').select2()
 
-    $('.select2bs4').select2({
-        theme: 'bootstrap4'
-    })
-  },
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
+    },
 
-  created() {
-    this.$Progress.start();
-    this.loadUsers();
-    this.loadPermissions();
-    this.loadServices();
-    this.$Progress.finish();
-  },
+    created() {
+        this.$Progress.start();
+        this.loadUsers();
+        this.loadPermissions();
+        this.loadServices();
+        this.$Progress.finish();
+    },
 };
 </script>

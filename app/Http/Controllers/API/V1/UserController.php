@@ -47,20 +47,18 @@ class UserController extends BaseController
      */
     public function store(UserRequest $request)
     {
-        $user = User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'type' => $request['type'],
-            'password' => Hash::make($request['password']),
-        ]);
+        // dd($request->all());
 
-        if ($request->has('permission')) {
-            $permissions = Permission::whereIn('id', $request->permission)->get();
+        $user = User::create($request->validated());
+        $user->update(['password' => Hash::make($request['password'])]);
+
+        if ($request->has('permission') && $request->type == 'admin') {
+            $permissions = array_column($request->permission, 'id');
             $user->permissions()->attach($permissions);
         }
 
-        if ($request->has('service')) {
-            $services = Service::whereIn('id', $request->service)->get();
+        if ($request->has('service') && $request->type == 'vendor') {
+            $services = array_column($request->service, 'id');
             $user->services()->attach($services);
         }
 
@@ -78,7 +76,6 @@ class UserController extends BaseController
      */
     public function update(UserRequest $request, $id)
     {
-        // dd($request->all());
 
         $user = User::findOrFail($id);
 
@@ -86,21 +83,27 @@ class UserController extends BaseController
             $request->merge(['password' => Hash::make($request['password'])]);
         }
 
-
-        if ($request->has('permission')) {
+        if ($request->has('permission') && $request->type == 'admin') {
             $user->permissions()->detach();
-            $permissions = User::whereIn('id', $request->permission)->get();
+            $permissions = array_column($request->permission, 'id');
             $user->permissions()->attach($permissions);
         }
 
-        if ($request->has('selectedServices')) {
-            $ids = array_column($request->selectedServices, 'id');
+        if ($request->has('service') && $request->type == 'vendor') {
+            $services = array_column($request->service, 'id');
             $user->services()->detach();
-            // $services = Service::whereIn('id', $ids)->get();
-            $user->services()->attach($ids);
+            $user->services()->attach($services);
         }
 
-        $user->update($request->all());
+        if ($request->type == 'admin') {
+            $user->services()->detach();
+        }
+
+        if ($request->type == 'vendor') {
+            $user->permissions()->detach();
+        }
+
+        $user->update($request->validated());
 
         return $this->sendResponse($user, 'User Information has been updated');
     }
@@ -125,10 +128,25 @@ class UserController extends BaseController
         return $this->sendResponse($vendors, 'Success');
     }
 
-    public function getSelectedServices()
+    public function getSelectedServices($id)
     {
-        // dd($id);
-        $servcies = Service::select('id','name')->orderBy('name','asc')->take(3)->get()->toArray();
+        $user = User::with(['services' => function ($query) {
+           return $query->select('services.id','services.name');
+        }])->find($id);
+
+        $servcies = $user->services->toArray();
+
         return $this->sendResponse($servcies, 'Success');
+    }
+
+    public function getSelectedPermissions($id)
+    {
+        $user = User::with(['permissions' => function ($query) {
+           return $query->select('permissions.id','permissions.name');
+        }])->find($id);
+
+        $permissions = $user->permissions->toArray();
+
+        return $this->sendResponse($permissions, 'Success');
     }
 }

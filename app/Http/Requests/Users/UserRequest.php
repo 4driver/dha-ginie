@@ -42,8 +42,8 @@ class UserRequest extends FormRequest
             'email' => 'required|string|email|max:191|unique:users',
             'password' => 'required|string|min:6',
             'type' => 'required|in:admin,user,vendor',
-            'permission' => 'nullable|array',
-            'service' => 'nullable|array',
+            'permission' => 'required_if:type,admin',
+            'service' => 'required_if:type,vendor'
         ];
     }
 
@@ -58,8 +58,8 @@ class UserRequest extends FormRequest
             'name' => 'sometimes|string|max:191',
             'email' => 'sometimes|string|email|max:191|unique:users,email,' . $this->get('id'),
             'type' => 'sometimes|in:admin,user,vendor',
-            'permission' => 'nullable|array',
-            'service' => 'nullable|array',
+            'permission' => 'required_if:type,admin',
+            'service' => 'required_if:type,vendor'
         ];
     }
 }

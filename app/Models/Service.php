@@ -11,6 +11,8 @@ class Service extends Model
 
     protected $guarded = [];
 
+    protected $hidden = ['pivot'];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
