@@ -39,6 +39,8 @@ class ServiceRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255||unique:services',
+            'price' => 'nullable|numeric|gt:0',
+            'offer_price' => 'nullable|numeric|gt:0',
             'category_id' => 'required|integer',
             'description' => 'required|string|max:1000',
         ];
@@ -53,6 +55,8 @@ class ServiceRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255|unique:services,name,' . $this->get('id'),
+            'price' => 'nullable|numeric|gt:0',
+            'offer_price' => 'nullable|numeric|gt:0',
             'category_id' => 'required|integer',
             'description' => 'required|string|max:1000',
         ];

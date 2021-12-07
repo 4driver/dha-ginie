@@ -17,6 +17,8 @@ class CreateServicesTable extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('category_id');
+            $table->double('price', 15, 8)->nullable();
+            $table->double('offer_price', 15, 8)->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->boolean('status')->nullable()->default(true);

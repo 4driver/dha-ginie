@@ -117,6 +117,33 @@
                   <has-error :form="form" field="category_id"></has-error>
                 </div>
 
+                <div class="row">
+                    <div class="form-group col-md-6 ">
+                        <label>Price</label>
+                        <input
+                            v-model="form.price"
+                            type="number"
+                            min="0"
+                            name="price"
+                            class="form-control"
+                            :class="{ 'is-invalid': form.errors.has('price') }"
+                        />
+                        <has-error :form="form" field="price"></has-error>
+                    </div>
+                    <div class="form-group col-md-6 ">
+                        <label>Offer Price</label>
+                        <input
+                            v-model="form.offer_price"
+                            type="number"
+                            min="0"
+                            name="offer_price"
+                            class="form-control"
+                            :class="{ 'is-invalid': form.errors.has('offer_price') }"
+                        />
+                        <has-error :form="form" field="offer_price"></has-error>
+                    </div>
+                </div>
+
                 <div class="form-group">
                   <label>Description</label>
                   <textarea
@@ -168,6 +195,8 @@ export default {
       form: new Form({
         id: "",
         name: "",
+        price: "",
+        offer_price: "",
         category_id: "",
         description: "",
       }),
