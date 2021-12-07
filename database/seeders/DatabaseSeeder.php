@@ -15,14 +15,14 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UsersTableSeeder::class);
         $this->call(PermissionSeeder::class);
-        $this->call(PageSeeder::class);
-        // \App\Models\User::factory(15)->create();
-        \App\Models\Complaint::factory(15)->create();
-        \App\Models\Faq::factory(15)->create();
-        \App\Models\Booking::factory(15)->create();
+        \App\Models\User::factory(15)->create();
         \App\Models\Category::factory(15)->create();
         \App\Models\Service::factory(50)->create();
+        \App\Models\Booking::factory(15)->create();
         \App\Models\Payment::factory(15)->create();
         \App\Models\Gallery::factory(15)->create();
+        \App\Models\Faq::factory(15)->create();
+        \App\Models\Complaint::factory(15)->create();
+        $this->call(PageSeeder::class);
     }
 }

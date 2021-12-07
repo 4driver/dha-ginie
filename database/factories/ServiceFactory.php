@@ -3,8 +3,9 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Service;
 use Faker\Provider\Lorem;
+use App\Models\Category;
+use App\Models\Service;
 
 class ServiceFactory extends Factory
 {
@@ -15,9 +16,11 @@ class ServiceFactory extends Factory
      */
     public function definition()
     {
+        $category = Category::inRandomOrder()->first();
+
         return [
             'name' => $this->faker->name,
-            'category_id' => $this->faker->numberBetween(1,10),
+            'category_id' => $category->id,
             'description' => Lorem::paragraphs(1,true),
             'status' => TRUE,
         ];

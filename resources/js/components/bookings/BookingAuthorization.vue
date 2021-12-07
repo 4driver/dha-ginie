@@ -29,7 +29,7 @@
                     <td>{{ booking.id }}</td>
                     <td class="text-capitalize">{{ booking.name }}</td>
                     <td>{{ booking.phone }}</td>
-                    <td>{{ booking.service }}</td>
+                    <td>{{ booking.service.name }}</td>
                     <td>{{ booking.location }}</td>
                     <td>{{ booking.date }}</td>
                     <td>{{ booking.address }}</td>

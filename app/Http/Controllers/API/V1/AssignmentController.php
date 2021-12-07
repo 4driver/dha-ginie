@@ -30,7 +30,9 @@ class AssignmentController extends BaseController
         if (!Gate::allows('isAdmin')) {
             return $this->unauthorizedResponse();
         }
-        $bookings = Booking::with('vendors')->orderBy('id','desc')->paginate(10);
+        $bookings = Booking::with(['vendors','service' => function ($query) {
+            return $query->select('id','name');
+        }])->orderBy('id','desc')->paginate(10);
         return $this->sendResponse($bookings, 'success');
     }
 

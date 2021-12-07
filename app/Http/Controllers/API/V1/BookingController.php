@@ -31,7 +31,9 @@ class BookingController extends BaseController
         if (!Gate::allows('isAdmin')) {
             return $this->unauthorizedResponse();
         }
-        $bookings = Booking::orderBy('id','desc')->paginate(10);
+        $bookings = Booking::with(['service' => function ($query) {
+            return $query->select('id','name');
+        }])->orderBy('id','desc')->paginate(10);
         return $this->sendResponse($bookings, 'success');
     }
 

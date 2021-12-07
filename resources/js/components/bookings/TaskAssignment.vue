@@ -13,7 +13,9 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Task</th>
+                    <th>Task / Bookings</th>
+                    <th>Date</th>
+                    <th>Address</th>
                     <th>Vendors</th>
                     <th>Action</th>
                   </tr>
@@ -21,7 +23,11 @@
                 <tbody>
                   <tr v-for="booking in bookings.data" :key="booking.id">
                     <td>{{ booking.id }}</td>
-                    <td class="text-capitalize">{{ booking.name }}</td>
+                    <td class="text-capitalize">
+                        <span class="badge badge-primary pt-1">{{ booking.service.name }}</span>
+                    </td>
+                    <td>{{ booking.date }}</td>
+                    <td>{{ booking.address }}</td>
                     <td>
                         <span v-for="vendor in booking.vendors" :key="vendor.id" class="badge badge-success m-1">
                             {{vendor.name}}

@@ -202,6 +202,7 @@
     display: none;
 }
 </style>
+
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <script>
@@ -295,6 +296,12 @@ export default {
             this.form.reset();
             this.selectedPermissions = [];
             this.selectedServices = [];
+
+            $(".email").attr('disabled', false);
+            $(".type").attr('disabled', false);
+            $(".permission_section").hide();
+            $(".service_section").hide();
+
             $("#addNew").modal("show");
         },
 
