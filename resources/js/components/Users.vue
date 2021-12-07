@@ -299,8 +299,28 @@ export default {
 
             $(".email").attr('disabled', false);
             $(".type").attr('disabled', false);
-            $(".permission_section").hide();
-            $(".service_section").hide();
+
+
+            $(".type").change(function (e) {
+                e.preventDefault();
+                    var type = $(this).val();
+
+                    if(type == 'user' || type == '') {
+                        $(".permission_section").addClass('hidden');
+                        $(".service_section").addClass('hidden');
+                    }
+
+                    if(type == 'admin') {
+                        $(".permission_section").removeClass('hidden');
+                        $(".service_section").addClass('hidden');
+                    }
+
+                    if(type == 'vendor') {
+                        $(".permission_section").addClass('hidden');
+                        $(".service_section").removeClass('hidden');
+                    }
+            });
+
 
             $("#addNew").modal("show");
         },
@@ -398,25 +418,25 @@ export default {
     },
 
     mounted() {
-        $(".type").change(function (e) {
-            e.preventDefault();
-                var type = $(this).val();
+        // $(".type").change(function (e) {
+        //     e.preventDefault();
+        //         var type = $(this).val();
 
-                if(type == 'user' || type == '') {
-                    $(".permission_section").addClass('hidden');
-                    $(".service_section").addClass('hidden');
-                }
+        //         if(type == 'user' || type == '') {
+        //             $(".permission_section").addClass('hidden');
+        //             $(".service_section").addClass('hidden');
+        //         }
 
-                if(type == 'admin') {
-                    $(".permission_section").removeClass('hidden');
-                    $(".service_section").addClass('hidden');
-                }
+        //         if(type == 'admin') {
+        //             $(".permission_section").removeClass('hidden');
+        //             $(".service_section").addClass('hidden');
+        //         }
 
-                if(type == 'vendor') {
-                    $(".permission_section").addClass('hidden');
-                    $(".service_section").removeClass('hidden');
-                }
-        });
+        //         if(type == 'vendor') {
+        //             $(".permission_section").addClass('hidden');
+        //             $(".service_section").removeClass('hidden');
+        //         }
+        // });
 
         $('.select2').select2()
 
