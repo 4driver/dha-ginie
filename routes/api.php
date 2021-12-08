@@ -37,6 +37,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'gallery' => 'GalleryController',
         'payment' => 'PaymentController',
         'assignment' => 'AssignmentController',
+        'package' => 'PackageController',
     ]);
 
     Route::get('profile', 'ProfileController@profile');

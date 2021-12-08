@@ -14,6 +14,7 @@ export default [
     { path: "/bookings/task-assignments", component: require("./components/bookings/TaskAssignment.vue").default },
     { path: "/reports/bookings", component: require("./components/reports/BookingsReport.vue").default },
     { path: "/reports/payments", component: require("./components/reports/PaymentsReport.vue").default },
+    { path: "/subscriptions", component: require("./components/Subscriptions.vue").default },
 
     { path: "*", component: require("./components/NotFound.vue").default }
 ];

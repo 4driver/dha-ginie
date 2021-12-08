@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UsersTableSeeder::class);
         $this->call(PermissionSeeder::class);
-        \App\Models\User::factory(15)->create();
+        // \App\Models\User::factory(15)->create();
         \App\Models\Category::factory(15)->create();
         \App\Models\Service::factory(50)->create();
         \App\Models\Booking::factory(15)->create();
@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Gallery::factory(15)->create();
         \App\Models\Faq::factory(15)->create();
         \App\Models\Complaint::factory(15)->create();
+        \App\Models\Package::factory(5)->create();
         $this->call(PageSeeder::class);
     }
 }
