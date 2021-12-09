@@ -18,7 +18,7 @@ class UserController extends BaseController
      */
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware(['permission:manage-users']);
     }
 
     /**
@@ -28,9 +28,9 @@ class UserController extends BaseController
      */
     public function index()
     {
-        if (!Gate::allows('isAdmin')) {
-            return $this->unauthorizedResponse();
-        }
+        // if (!Gate::allows('isAdmin')) {
+        //     return $this->unauthorizedResponse();
+        // }
         $users = User::with(['permissions','services'])->orderBy('id','desc')->paginate(10);
         return $this->sendResponse($users, 'Success');
     }
@@ -47,7 +47,6 @@ class UserController extends BaseController
      */
     public function store(UserRequest $request)
     {
-
         $user = User::create($request->validated());
         $user->update(['password' => Hash::make($request['password'])]);
 

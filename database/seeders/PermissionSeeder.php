@@ -18,14 +18,56 @@ class PermissionSeeder extends Seeder
     {
         Permission::insert([
             [
-                'name'=>'Manage Admin Users',
-                'slug'=>'manage-admin-users',
+                'name'=>'Manage Users',
+                'slug'=>'manage-users',
                 'created_at'=>Carbon::now(),
                 'updated_at'=>Carbon::now(),
             ],
             [
-                'name'=>'Manage Registered Users',
-                'slug'=>'manage-registered-users',
+                'name'=>'Manage Categories',
+                'slug'=>'manage-categories',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now(),
+            ],
+            [
+                'name'=>'Manage Services',
+                'slug'=>'manage-services',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now(),
+            ],
+            [
+                'name'=>'Manage Bookings',
+                'slug'=>'manage-bookings',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now(),
+            ],
+            [
+                'name'=>'Manage Gallery',
+                'slug'=>'manage-gallery',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now(),
+            ],
+            [
+                'name'=>'Manage Faqs',
+                'slug'=>'manage-faqs',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now(),
+            ],
+            [
+                'name'=>'Manage Pages',
+                'slug'=>'manage-pages',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now(),
+            ],
+            [
+                'name'=>'Manage Complaints',
+                'slug'=>'manage-complaints',
+                'created_at'=>Carbon::now(),
+                'updated_at'=>Carbon::now(),
+            ],
+            [
+                'name'=>'Manage Reports',
+                'slug'=>'manage-reports',
                 'created_at'=>Carbon::now(),
                 'updated_at'=>Carbon::now(),
             ],

@@ -85,4 +85,8 @@ class User extends Authenticatable // implements MustVerifyEmail
         return $this->belongsToMany(Service::class, 'user_services');
     }
 
+    public function hasPermission($permission) {
+        return (bool) $this->permissions->where('slug', $permission)->count();
+    }
+
 }

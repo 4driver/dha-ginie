@@ -10,28 +10,36 @@
         </li>
 
         @can('isAdmin')
+
+        @if (Auth::user()->hasPermission('manage-users'))
         <li class="nav-item">
             <router-link to="/users" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
                 <p>Manage Users</p>
             </router-link>
         </li>
+        @endif
 
 
+        @if (Auth::user()->hasPermission('manage-categories'))
         <li class="nav-item">
             <router-link to="/categories" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
                 <p>Manage Categories</p>
             </router-link>
         </li>
+        @endif
 
+        @if (Auth::user()->hasPermission('manage-services'))
         <li class="nav-item">
             <router-link to="/services" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
                 <p>Manage Services</p>
             </router-link>
         </li>
+        @endif
 
+        @if (Auth::user()->hasPermission('manage-bookings'))
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
@@ -55,42 +63,54 @@
                 </li>
             </ul>
         </li>
+        @endif
 
+        @if (Auth::user()->hasPermission('manage-gallery'))
         <li class="nav-item">
             <router-link to="/galleries" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
                 <p>Manage Gallery</p>
             </router-link>
         </li>
+        @endif
 
+        @if (Auth::user()->hasPermission('manage-faqs'))
         <li class="nav-item">
             <router-link to="faqs" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
                 <p>Manage FAQs</p>
             </router-link>
         </li>
+        @endif
 
+        @if (Auth::user()->hasPermission('manage-pages'))
         <li class="nav-item">
             <router-link to="/pages" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
                 <p>Manage CMS Pages</p>
             </router-link>
         </li>
+        @endif
 
+        @if (Auth::user()->hasPermission('manage-complaints'))
         <li class="nav-item">
             <router-link to="/complaints" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
                 <p>Manage Complaints</p>
             </router-link>
         </li>
+        @endif
 
+        @if (Auth::user()->hasPermission('manage-subscriptions'))
         <li class="nav-item">
             <router-link to="/subscriptions" class="nav-link">
                 <i class="fa fa-list nav-icon"></i>
                 <p>Manage Subscriptions</p>
             </router-link>
         </li>
+        @endif
 
+        @if (Auth::user()->hasPermission('manage-reports'))
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-file-alt"></i>
@@ -114,6 +134,7 @@
                 </li>
             </ul>
         </li>
+        @endif
 
         @endcan
 
